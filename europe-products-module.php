@@ -136,7 +136,13 @@ function ep_build_payload() {
 	$categories = array_keys( $cat_set );
 	sort( $categories );
 
+	// Debug: expose all meta keys from first eSIM product so we can identify the correct key names.
+	// Remove this once meta keys are confirmed.
+	$debug_product = current( array_filter( $raw, fn( $p ) => str_contains( $p->get_name(), 'eSIM' ) ) );
+	$debug_meta    = $debug_product ? array_map( fn( $v ) => $v[0], get_post_meta( $debug_product->get_id() ) ) : [];
+
 	return [
+		'_debug_meta' => $debug_meta,
 		'products'     => $products,
 		'categories'   => $categories,
 		'cartUrl'      => wc_get_cart_url(),

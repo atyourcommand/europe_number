@@ -106,14 +106,22 @@ function ep_build_payload() {
 			}
 		}
 
-		// Data size — meta:Display size preferred; fall back to parsing the title
-		$display_size = ep_get_meta( $id, 'Display size', 'display_size', '_display_size', 'display-size' );
+		// Data size — CSV column "meta:Display size" (numeric) + "meta:Display units" (e.g. "GB")
+		// WooCommerce CSV importers may store the key with or without the "meta:" prefix.
+		$display_size  = ep_get_meta( $id, 'meta:Display size', 'Display size', 'display_size', '_display_size' );
+		$display_units = ep_get_meta( $id, 'meta:Display units', 'Display units', 'display_units', '_display_units' );
+		if ( $display_size && $display_units ) {
+			$display_size = $display_size . $display_units;   // e.g. "20" + "GB" → "20GB"
+		} elseif ( $display_size && is_numeric( $display_size ) ) {
+			$display_size = $display_size . 'GB';             // assume GB if units missing
+		}
+		// Last resort: parse GB value from product title
 		if ( ! $display_size && preg_match( '/(\d+)\s*GB/i', $product->get_name(), $m ) ) {
 			$display_size = $m[1] . 'GB';
 		}
 
-		// Traffic policy — sourced from meta:Traffic policy
-		$traffic_policy = ep_get_meta( $id, 'Traffic policy', 'traffic_policy', '_traffic_policy', 'Traffic Policy' );
+		// Traffic policy — CSV column "meta:Traffic policy" (values: data / calls_data / calls)
+		$traffic_policy = ep_get_meta( $id, 'meta:Traffic policy', 'Traffic policy', 'traffic_policy', '_traffic_policy' );
 
 		$products[] = [
 			'id'             => $id,
@@ -349,10 +357,17 @@ function ep_js() {
 				+ '</button>';
 		}
 
-		var policyHtml = '';
-		if (p.traffic_policy) {
-			policyHtml = '<p class="text-xs text-gray-500 mt-1">' + esc(p.traffic_policy) + '</p>';
-		}
+		var policyLabels = {
+			'data'       : 'Data only',
+			'calls'      : 'Calls &amp; SMS only',
+			'calls_data' : 'Data + Calls &amp; SMS',
+		};
+		var policyText = p.traffic_policy
+			? (policyLabels[p.traffic_policy] || esc(p.traffic_policy))
+			: '';
+		var policyHtml = policyText
+			? '<p class="text-xs text-gray-500 mt-1">' + policyText + '</p>'
+			: '';
 
 		card.innerHTML =
 			'<div class="p-6 flex flex-col gap-5">'

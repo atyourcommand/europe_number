@@ -44,7 +44,7 @@ add_shortcode( 'europe_products', function ( $atts ) {
 	$atts = shortcode_atts(
 		[
 			'category'     => 'Europe',
-			'default_data' => '20GB',
+			'default_data' => '30GB',
 		],
 		$atts,
 		'europe_products'
@@ -152,7 +152,7 @@ function ep_build_payload() {
 // ─────────────────────────────────────────────────────────────────────────────
 // HTML shell
 // ─────────────────────────────────────────────────────────────────────────────
-function ep_html( $default_category = 'Europe', $default_data = '20GB' ) {
+function ep_html( $default_category = 'Europe', $default_data = '30GB' ) {
 	ob_start();
 	?>
 	<div id="ep-module"
@@ -454,7 +454,7 @@ function ep_js() {
 
 	selCat.addEventListener('change', function () {
 		state.category  = this.value;
-		state.dataValue = '';          // reset; renderDataDropdown will re-default
+		state.dataValue = module.dataset.defaultData || '30GB'; // reset to default on category change
 		renderDataDropdown();
 		renderCard();
 	});

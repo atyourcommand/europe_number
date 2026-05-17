@@ -106,8 +106,11 @@ function ep_build_payload() {
 			}
 		}
 
-		// Data size — sourced from meta:Display size
+		// Data size — meta:Display size preferred; fall back to parsing the title
 		$display_size = ep_get_meta( $id, 'Display size', 'display_size', '_display_size', 'display-size' );
+		if ( ! $display_size && preg_match( '/(\d+)\s*GB/i', $product->get_name(), $m ) ) {
+			$display_size = $m[1] . 'GB';
+		}
 
 		// Traffic policy — sourced from meta:Traffic policy
 		$traffic_policy = ep_get_meta( $id, 'Traffic policy', 'traffic_policy', '_traffic_policy', 'Traffic Policy' );

@@ -108,8 +108,8 @@ function ep_build_payload() {
 
 		// Data size — CSV column "meta:Display size" (numeric) + "meta:Display units" (e.g. "GB")
 		// WooCommerce CSV importers may store the key with or without the "meta:" prefix.
-		$display_size  = ep_get_meta( $id, 'meta:Display size', 'Display size', 'display_size', '_display_size' );
-		$display_units = ep_get_meta( $id, 'meta:Display units', 'Display units', 'display_units', '_display_units' );
+		$display_size  = ep_get_meta( $id, 'display size', 'meta:Display size', 'Display size', 'display_size' );
+		$display_units = ep_get_meta( $id, 'display units', 'meta:Display units', 'Display units', 'display_units' );
 		if ( $display_size && $display_units ) {
 			$display_size = $display_size . $display_units;   // e.g. "20" + "GB" → "20GB"
 		} elseif ( $display_size && is_numeric( $display_size ) ) {
@@ -120,8 +120,8 @@ function ep_build_payload() {
 			$display_size = $m[1] . 'GB';
 		}
 
-		// Traffic policy — CSV column "meta:Traffic policy" (values: data / calls_data / calls)
-		$traffic_policy = ep_get_meta( $id, 'meta:Traffic policy', 'Traffic policy', 'traffic_policy', '_traffic_policy' );
+		// Traffic policy — actual WP meta key is lowercase with space: "traffic policy"
+		$traffic_policy = ep_get_meta( $id, 'traffic policy', 'meta:Traffic policy', 'Traffic policy', 'traffic_policy' );
 
 		$products[] = [
 			'id'             => $id,
@@ -136,13 +136,7 @@ function ep_build_payload() {
 	$categories = array_keys( $cat_set );
 	sort( $categories );
 
-	// Debug: expose all meta keys from first eSIM product so we can identify the correct key names.
-	// Remove this once meta keys are confirmed.
-	$debug_product = current( array_filter( $raw, fn( $p ) => str_contains( $p->get_name(), 'eSIM' ) ) );
-	$debug_meta    = $debug_product ? array_map( fn( $v ) => $v[0], get_post_meta( $debug_product->get_id() ) ) : [];
-
 	return [
-		'_debug_meta' => $debug_meta,
 		'products'     => $products,
 		'categories'   => $categories,
 		'cartUrl'      => wc_get_cart_url(),

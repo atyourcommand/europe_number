@@ -469,7 +469,17 @@ function ep_js() {
 	});
 
 	selData.addEventListener('change', function () {
+		var prevData    = state.dataValue;
 		state.dataValue = this.value;
+
+		if (typeof gtag === 'function') {
+			gtag('event', 'esim_data_select', {
+				esim_data          : state.dataValue,
+				esim_previous_data : prevData,
+				esim_category      : state.category,
+			});
+		}
+
 		renderCard();
 	});
 

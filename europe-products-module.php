@@ -123,6 +123,9 @@ function ep_build_payload() {
 		// Traffic policy — actual WP meta key is lowercase with space: "traffic policy"
 		$traffic_policy = ep_get_meta( $id, 'traffic policy', 'meta:Traffic policy', 'Traffic policy', 'traffic_policy' );
 
+		// Validity — meta:download_expiry_days (numeric days, e.g. 15, 30)
+		$expiry_days = ep_get_meta( $id, 'download_expiry_days', 'meta:download_expiry_days', '_download_expiry' );
+
 		$products[] = [
 			'id'             => $id,
 			'title'          => $product->get_name(),
@@ -130,6 +133,7 @@ function ep_build_payload() {
 			'categories'     => $cats,
 			'display_size'   => $display_size,
 			'traffic_policy' => $traffic_policy,
+			'expiry_days'    => $expiry_days ? (int) $expiry_days : 0,
 		];
 	}
 
@@ -382,8 +386,13 @@ function ep_js() {
 			+   '<span class="text-xs text-gray-400">' + esc(p.categories.join(', ')) + '</span>'
 			+ '</div>'
 
-			// ── Policy badges above title ───────────────────────────────────
-			+ (badgeHtml ? '<div class="flex flex-wrap gap-2">' + badgeHtml + '</div>' : '')
+			// ── Policy badges + expiry ──────────────────────────────────────
+			+ (badgeHtml || p.expiry_days
+				? '<div class="flex flex-wrap items-center gap-2">'
+				+   badgeHtml
+				+   (p.expiry_days ? '<span class="text-xs text-gray-500">' + p.expiry_days + ' days</span>' : '')
+				+ '</div>'
+				: '')
 
 			// ── Title ───────────────────────────────────────────────────────
 			+ '<h2 class="text-gray-900 font-bold text-xl leading-snug">'

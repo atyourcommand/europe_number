@@ -453,8 +453,17 @@ function ep_js() {
 	// ── event listeners ──────────────────────────────────────────────────────
 
 	selCat.addEventListener('change', function () {
-		state.category  = this.value;
-		state.dataValue = module.dataset.defaultData || '30GB'; // reset to default on category change
+		var prevCategory = state.category;
+		state.category   = this.value;
+		state.dataValue  = module.dataset.defaultData || '30GB';
+
+		if (typeof gtag === 'function') {
+			gtag('event', 'esim_category_select', {
+				esim_category          : state.category,
+				esim_previous_category : prevCategory,
+			});
+		}
+
 		renderDataDropdown();
 		renderCard();
 	});

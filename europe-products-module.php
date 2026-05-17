@@ -146,6 +146,18 @@ function ep_build_payload() {
 		'cartUrl'      => wc_get_cart_url(),
 		'storeApiBase' => esc_url_raw( get_rest_url( null, 'wc/store/v1' ) ),
 		'storeNonce'   => wp_create_nonce( 'wc_store_api' ),
+
+		// ── Hero background images ───────────────────────────────────────────
+		// Add one entry per category as images become available.
+		// Key = WooCommerce category name. Value = filename inside heroBase.
+		'heroBase'    => 'https://europenumber.com/wp-content/uploads/2026/05/',
+		'heroDefault' => 'hero-default-1-300x233.webp',
+		'heroImages'  => [
+			'Europe' => 'hero-europe-1-300x233.webp',
+			'France' => 'hero-france-1-300x233.webp',
+			'Spain'  => 'hero-spain-1-300x233.webp',
+			'UK'     => 'hero-uk-1-300x233.webp',
+		],
 	];
 }
 
@@ -195,9 +207,16 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB' ) {
 
 		<!-- ── Product card ── -->
 		<div id="ep-card"
-			class="rounded-2xl border border-gray-200 bg-white shadow-sm
-			       transition-opacity duration-200">
-			<div class="p-6 text-center text-sm text-gray-400">Loading&hellip;</div>
+			class="relative rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+			<!-- background image layer — fades independently of the content -->
+			<div id="ep-card-bg"
+				style="position:absolute;inset:0;background-size:cover;background-position:center;
+				       opacity:0;transition:opacity 0.5s ease;pointer-events:none;"></div>
+			<!-- white overlay keeps content readable over any image -->
+			<div id="ep-card-inner"
+				class="relative bg-white/90">
+				<div class="p-6 text-center text-sm text-gray-400">Loading&hellip;</div>
+			</div>
 		</div>
 
 	</div>
@@ -220,8 +239,10 @@ function ep_js() {
 	var selData= document.getElementById('ep-data');
 	var dLabel = document.getElementById('ep-data-label');
 	var card   = document.getElementById('ep-card');
+	var cardBg = document.getElementById('ep-card-bg');
+	var inner  = document.getElementById('ep-card-inner');
 
-	if (!d || !module || !selCat || !selData || !card) return;
+	if (!d || !module || !selCat || !selData || !card || !inner) return;
 
 	// ── state ────────────────────────────────────────────────────────────────
 
@@ -251,6 +272,39 @@ function ep_js() {
 		return arr.slice().sort(function (a, b) {
 			return (parseFloat(a) || 0) - (parseFloat(b) || 0);
 		});
+	}
+
+	// ── hero background ──────────────────────────────────────────────────────
+
+	var bgSeq = 0; // prevents stale async loads from overwriting a newer image
+
+	function updateCardBackground(catName) {
+		if (!cardBg) return;
+
+		var seq      = ++bgSeq;
+		var base     = d.heroBase    || '';
+		var fallback = base + (d.heroDefault || 'hero-default-1-300x233.webp');
+		var filename = d.heroImages && d.heroImages[catName];
+		var target   = filename ? base + filename : fallback;
+
+		cardBg.style.opacity = '0';
+
+		function apply(url) {
+			if (seq !== bgSeq) return; // a newer call already won
+			cardBg.style.backgroundImage = 'url(' + url + ')';
+			cardBg.style.opacity         = '1';
+		}
+
+		if (target === fallback) {
+			// No custom image for this category — use default immediately
+			setTimeout(function () { apply(fallback); }, 20);
+			return;
+		}
+
+		var img    = new Image();
+		img.onload  = function () { apply(target); };
+		img.onerror = function () { apply(fallback); };
+		img.src     = target;
 	}
 
 	/**
@@ -335,7 +389,7 @@ function ep_js() {
 		var p = findProduct();
 
 		if (!p) {
-			card.innerHTML = '<div class="p-6 text-center text-sm text-gray-400">'
+			inner.innerHTML = '<div class="p-6 text-center text-sm text-gray-400">'
 				+ 'No product available for this selection.</div>';
 			return;
 		}
@@ -374,7 +428,7 @@ function ep_js() {
 				+ ' text-xs font-medium px-2.5 py-1">' + label + '</span>';
 		}).join('');
 
-		card.innerHTML =
+		inner.innerHTML =
 			'<div class="p-6 flex flex-col gap-5">'
 
 			// ── Data size badge + category ──────────────────────────────────
@@ -409,7 +463,7 @@ function ep_js() {
 
 			+ '</div>';
 
-		var atcBtn = card.querySelector('.ep-atc');
+		var atcBtn = inner.querySelector('.ep-atc');
 		if (atcBtn) atcBtn.addEventListener('click', handleAddToCart);
 	}
 
@@ -464,6 +518,7 @@ function ep_js() {
 			});
 		}
 
+		updateCardBackground(state.category);
 		renderDataDropdown();
 		renderCard();
 	});
@@ -491,6 +546,7 @@ function ep_js() {
 
 		renderCategoryDropdown();
 		renderDataDropdown();
+		updateCardBackground(state.category);
 		renderCard();
 	}
 

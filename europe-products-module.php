@@ -141,8 +141,10 @@ function ep_build_payload( $forced_data_attr = '' ) {
  * Priority:
  *   1. Shortcode param if provided.
  *   2. Attribute named exactly "Data" (case-insensitive).
- *   3. Attribute whose values universally match a storage-size pattern (GB/MB/TB).
+ *   3. Any attribute that has at least one value containing a storage-size (GB/MB/TB).
  *   4. First attribute found across all products.
+ *
+ * Always returns a string (never null).
  */
 function ep_detect_data_attr( array $products, $forced = '' ) {
 
@@ -162,26 +164,28 @@ function ep_detect_data_attr( array $products, $forced = '' ) {
 		return '';
 	}
 
-	// Pass 1 – exact "Data" match
+	// Pass 1 – exact "Data" name match (case-insensitive)
 	foreach ( array_keys( $attr_names ) as $name ) {
 		if ( strtolower( trim( $name ) ) === 'data' ) {
 			return $name;
 		}
 	}
 
-	// Pass 2 – values look like storage sizes
-	$size_pattern = '/^\d+(\.\d+)?\s*(GB|MB|TB)/i';
+	// Pass 2 – ANY value across ANY product contains a storage-size token
+	$size_pattern = '/\d+(\.\d+)?\s*(GB|MB|TB)/i';
 	foreach ( array_keys( $attr_names ) as $name ) {
 		foreach ( $products as $p ) {
-			$vals = $p['attributes'][ $name ] ?? [];
-			if ( $vals && count( array_filter( $vals, fn( $v ) => preg_match( $size_pattern, $v ) ) ) === count( $vals ) ) {
-				return $name;
+			foreach ( ( $p['attributes'][ $name ] ?? [] ) as $val ) {
+				if ( preg_match( $size_pattern, $val ) ) {
+					return $name;
+				}
 			}
 		}
 	}
 
-	// Pass 3 – first attribute found
-	return array_key_first( $attr_names );
+	// Pass 3 – first attribute found (cast to string — array_key_first returns null on PHP < 7.3)
+	$keys = array_keys( $attr_names );
+	return (string) reset( $keys );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -288,12 +292,58 @@ function ep_js() {
 		});
 	}
 
+	/**
+	 * Pick the best attribute name to use as the data dimension.
+	 * Client-side mirror of the PHP detection — runs as a fallback when
+	 * d.dataAttrName is empty/null (e.g. products had no attributes at
+	 * PHP render time, or a caching layer serialised null).
+	 */
+	function resolveDataAttrName(catName) {
+		if (d.dataAttrName) return d.dataAttrName;
+
+		var gbRe = /\d+(\.\d+)?\s*(GB|MB|TB)/i;
+		var inCat = d.products.filter(function (p) {
+			return !catName || p.categories.includes(catName);
+		});
+
+		// 1. Attr named "data"
+		for (var i = 0; i < inCat.length; i++) {
+			var names = Object.keys(inCat[i].attributes);
+			for (var j = 0; j < names.length; j++) {
+				if (names[j].toLowerCase().trim() === 'data') return names[j];
+			}
+		}
+
+		// 2. Any value containing GB/MB/TB
+		for (var i = 0; i < inCat.length; i++) {
+			var attrs = inCat[i].attributes;
+			var names = Object.keys(attrs);
+			for (var j = 0; j < names.length; j++) {
+				var vals = attrs[names[j]] || [];
+				for (var k = 0; k < vals.length; k++) {
+					if (gbRe.test(vals[k])) return names[j];
+				}
+			}
+		}
+
+		// 3. First attribute on any product in category
+		for (var i = 0; i < inCat.length; i++) {
+			var names = Object.keys(inCat[i].attributes);
+			if (names.length) return names[0];
+		}
+
+		return '';
+	}
+
 	/** All distinct data-attribute values available for a given category */
 	function dataOptionsFor(catName) {
+		var attrName = resolveDataAttrName(catName);
+		if (!attrName) return [];
+
 		var seen = {};
 		d.products.forEach(function (p) {
 			if (catName && !p.categories.includes(catName)) return;
-			var vals = p.attributes[d.dataAttrName] || [];
+			var vals = p.attributes[attrName] || [];
 			vals.forEach(function (v) { seen[v] = true; });
 		});
 		return sortDataValues(Object.keys(seen));
@@ -311,8 +361,10 @@ function ep_js() {
 		if (!inCat.length) return null;
 		if (!state.dataValue) return inCat[0];
 
+		var attrName = resolveDataAttrName(state.category);
+
 		var exact = inCat.find(function (p) {
-			var vals = p.attributes[d.dataAttrName] || [];
+			var vals = (attrName ? p.attributes[attrName] : []) || [];
 			return vals.some(function (v) {
 				return normData(v) === normData(state.dataValue);
 			});
@@ -335,17 +387,23 @@ function ep_js() {
 	}
 
 	function renderDataDropdown() {
-		var options = dataOptionsFor(state.category);
+		var options  = dataOptionsFor(state.category);
+		var attrName = resolveDataAttrName(state.category);
+
+		// Update the label to the detected attribute name
+		if (dLabel) dLabel.textContent = attrName || 'Data';
 
 		selData.innerHTML = '';
 
 		if (!options.length) {
+			var placeholder = document.createElement('option');
+			placeholder.value       = '';
+			placeholder.textContent = 'N/A';
+			selData.appendChild(placeholder);
 			selData.disabled = true;
+			state.dataValue  = '';
 			return;
 		}
-
-		// Update label to the attribute name (e.g. "Data" or "GB")
-		if (dLabel && d.dataAttrName) dLabel.textContent = d.dataAttrName;
 
 		options.forEach(function (v) {
 			var o         = document.createElement('option');
@@ -355,12 +413,12 @@ function ep_js() {
 			selData.appendChild(o);
 		});
 
-		// Sync state.dataValue to what is actually selected after building list
+		// Sync state.dataValue — prefer exact match, then last (largest) option
 		var matched = options.find(function (v) {
 			return normData(v) === normData(state.dataValue);
 		});
-		state.dataValue = matched || options[options.length - 1] || '';
-		selData.value   = state.dataValue;
+		state.dataValue  = matched || options[options.length - 1] || '';
+		selData.value    = state.dataValue;
 		selData.disabled = false;
 	}
 

@@ -357,24 +357,23 @@ function ep_js() {
 				+ '</button>';
 		}
 
-		var policyLabels = {
-			'data'       : 'Data only',
-			'calls'      : 'Calls &amp; SMS only',
-			'calls_data' : 'Data + Calls &amp; SMS',
+		var policyBadges = {
+			'calls'      : ['Calls SMS', 'No data'],
+			'calls_data' : ['Calls SMS', 'Data'],
+			'data'       : ['Data only'],
 		};
-		var policyText = p.traffic_policy
-			? (policyLabels[p.traffic_policy] || esc(p.traffic_policy))
-			: '';
-		var policyHtml = policyText
-			? '<p class="text-xs text-gray-500 mt-1">' + policyText + '</p>'
-			: '';
+		var badges = (p.traffic_policy && policyBadges[p.traffic_policy])
+			? policyBadges[p.traffic_policy]
+			: [];
+		var badgeHtml = badges.map(function (label) {
+			return '<span class="inline-block rounded-full bg-gray-100 text-gray-600'
+				+ ' text-xs font-medium px-2.5 py-1">' + label + '</span>';
+		}).join('');
 
 		card.innerHTML =
 			'<div class="p-6 flex flex-col gap-5">'
 
-			// ── Data dropdown sits above the title ──────────────────────────
-			// (The #ep-data select is in the controls bar above the card.
-			//  This inner label echoes the current selection for clarity.)
+			// ── Data size badge + category ──────────────────────────────────
 			+ '<div class="flex items-center justify-between gap-2">'
 			+   '<span class="inline-flex items-center gap-1.5 rounded-full bg-indigo-50'
 			+         ' text-indigo-700 text-xs font-semibold px-3 py-1">'
@@ -383,13 +382,13 @@ function ep_js() {
 			+   '<span class="text-xs text-gray-400">' + esc(p.categories.join(', ')) + '</span>'
 			+ '</div>'
 
-			// ── Title + traffic policy ──────────────────────────────────────
-			+ '<div>'
-			+   '<h2 class="text-gray-900 font-bold text-xl leading-snug">'
-			+     esc(p.title)
-			+   '</h2>'
-			+   policyHtml
-			+ '</div>'
+			// ── Policy badges above title ───────────────────────────────────
+			+ (badgeHtml ? '<div class="flex flex-wrap gap-2">' + badgeHtml + '</div>' : '')
+
+			// ── Title ───────────────────────────────────────────────────────
+			+ '<h2 class="text-gray-900 font-bold text-xl leading-snug">'
+			+   esc(p.title)
+			+ '</h2>'
 
 			// ── Price ───────────────────────────────────────────────────────
 			+ '<div class="text-2xl font-extrabold text-indigo-700 leading-none">'

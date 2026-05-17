@@ -6,9 +6,6 @@
  * Params:
  *   category="Europe"      – default selected category
  *   default_data="20GB"    – default selected data value  (matched loosely, e.g. "20 GB" == "20GB")
- *   data_attr=""           – product attribute name used as the data dropdown
- *                            (auto-detected when blank: prefers "Data", then any attr whose
- *                             values all contain GB / MB / TB)
  *
  * Behaviour
  * ─────────
@@ -48,7 +45,6 @@ add_shortcode( 'europe_products', function ( $atts ) {
 		[
 			'category'     => 'Europe',
 			'default_data' => '20GB',
-			'data_attr'    => '',
 		],
 		$atts,
 		'europe_products'
@@ -62,7 +58,7 @@ add_shortcode( 'europe_products', function ( $atts ) {
 	static $injected = false;
 	if ( ! $injected ) {
 		$injected = true;
-		$payload  = ep_build_payload( $atts['data_attr'] );
+		$payload  = ep_build_payload();
 
 		add_action( 'wp_footer', function () use ( $payload ) {
 			echo '<script id="ep-data">window.epData=' . wp_json_encode( $payload ) . ';</script>' . "\n";
@@ -76,7 +72,23 @@ add_shortcode( 'europe_products', function ( $atts ) {
 // ─────────────────────────────────────────────────────────────────────────────
 // Data payload
 // ─────────────────────────────────────────────────────────────────────────────
-function ep_build_payload( $forced_data_attr = '' ) {
+
+/**
+ * Try a list of meta key variants in order; return the first non-empty value.
+ * Handles the inconsistent naming conventions common across WooCommerce setups
+ * (e.g. "Display size" vs "display_size" vs "_display_size").
+ */
+function ep_get_meta( $id, ...$keys ) {
+	foreach ( $keys as $key ) {
+		$val = get_post_meta( $id, $key, true );
+		if ( $val !== '' && $val !== false && $val !== null ) {
+			return (string) $val;
+		}
+	}
+	return '';
+}
+
+function ep_build_payload() {
 
 	$raw      = wc_get_products( [ 'limit' => -1, 'status' => 'publish' ] );
 	$products = [];
@@ -94,31 +106,19 @@ function ep_build_payload( $forced_data_attr = '' ) {
 			}
 		}
 
-		// Product attributes
-		$attributes = [];
-		foreach ( $product->get_attributes() as $key => $attr ) {
-			$label = wc_attribute_label( $key );
-			if ( $attr->is_taxonomy() ) {
-				$vals = wc_get_product_terms( $id, $key, [ 'fields' => 'names' ] );
-			} else {
-				$vals = array_map( 'trim', (array) $attr->get_options() );
-			}
-			$attributes[ $label ] = array_values( array_filter( $vals ) );
-		}
+		// Data size — sourced from meta:Display size
+		$display_size = ep_get_meta( $id, 'Display size', 'display_size', '_display_size', 'display-size' );
 
-		// traffic_policy custom field (try both common key patterns)
-		$traffic_policy = get_post_meta( $id, 'traffic_policy', true );
-		if ( ! $traffic_policy ) {
-			$traffic_policy = get_post_meta( $id, '_traffic_policy', true );
-		}
+		// Traffic policy — sourced from meta:Traffic policy
+		$traffic_policy = ep_get_meta( $id, 'Traffic policy', 'traffic_policy', '_traffic_policy', 'Traffic Policy' );
 
 		$products[] = [
 			'id'             => $id,
 			'title'          => $product->get_name(),
 			'price_html'     => $product->get_price_html(),
 			'categories'     => $cats,
-			'attributes'     => $attributes,
-			'traffic_policy' => (string) $traffic_policy,
+			'display_size'   => $display_size,
+			'traffic_policy' => $traffic_policy,
 		];
 	}
 
@@ -128,64 +128,10 @@ function ep_build_payload( $forced_data_attr = '' ) {
 	return [
 		'products'     => $products,
 		'categories'   => $categories,
-		'dataAttrName' => ep_detect_data_attr( $products, $forced_data_attr ),
 		'cartUrl'      => wc_get_cart_url(),
 		'storeApiBase' => esc_url_raw( get_rest_url( null, 'wc/store/v1' ) ),
 		'storeNonce'   => wp_create_nonce( 'wc_store_api' ),
 	];
-}
-
-/**
- * Determine which product attribute name represents the data-size dimension.
- *
- * Priority:
- *   1. Shortcode param if provided.
- *   2. Attribute named exactly "Data" (case-insensitive).
- *   3. Any attribute that has at least one value containing a storage-size (GB/MB/TB).
- *   4. First attribute found across all products.
- *
- * Always returns a string (never null).
- */
-function ep_detect_data_attr( array $products, $forced = '' ) {
-
-	if ( $forced !== '' ) {
-		return $forced;
-	}
-
-	$attr_names = [];
-
-	foreach ( $products as $p ) {
-		foreach ( array_keys( $p['attributes'] ) as $name ) {
-			$attr_names[ $name ] = ( $attr_names[ $name ] ?? 0 ) + 1;
-		}
-	}
-
-	if ( ! $attr_names ) {
-		return '';
-	}
-
-	// Pass 1 – exact "Data" name match (case-insensitive)
-	foreach ( array_keys( $attr_names ) as $name ) {
-		if ( strtolower( trim( $name ) ) === 'data' ) {
-			return $name;
-		}
-	}
-
-	// Pass 2 – ANY value across ANY product contains a storage-size token
-	$size_pattern = '/\d+(\.\d+)?\s*(GB|MB|TB)/i';
-	foreach ( array_keys( $attr_names ) as $name ) {
-		foreach ( $products as $p ) {
-			foreach ( ( $p['attributes'][ $name ] ?? [] ) as $val ) {
-				if ( preg_match( $size_pattern, $val ) ) {
-					return $name;
-				}
-			}
-		}
-	}
-
-	// Pass 3 – first attribute found (cast to string — array_key_first returns null on PHP < 7.3)
-	$keys = array_keys( $attr_names );
-	return (string) reset( $keys );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -293,65 +239,22 @@ function ep_js() {
 	}
 
 	/**
-	 * Pick the best attribute name to use as the data dimension.
-	 * Client-side mirror of the PHP detection — runs as a fallback when
-	 * d.dataAttrName is empty/null (e.g. products had no attributes at
-	 * PHP render time, or a caching layer serialised null).
+	 * Unique display_size values for products in the given category,
+	 * sorted numerically (1GB < 5GB < 10GB < 20GB).
+	 * Source: meta:Display size on each WooCommerce product.
 	 */
-	function resolveDataAttrName(catName) {
-		if (d.dataAttrName) return d.dataAttrName;
-
-		var gbRe = /\d+(\.\d+)?\s*(GB|MB|TB)/i;
-		var inCat = d.products.filter(function (p) {
-			return !catName || p.categories.includes(catName);
-		});
-
-		// 1. Attr named "data"
-		for (var i = 0; i < inCat.length; i++) {
-			var names = Object.keys(inCat[i].attributes);
-			for (var j = 0; j < names.length; j++) {
-				if (names[j].toLowerCase().trim() === 'data') return names[j];
-			}
-		}
-
-		// 2. Any value containing GB/MB/TB
-		for (var i = 0; i < inCat.length; i++) {
-			var attrs = inCat[i].attributes;
-			var names = Object.keys(attrs);
-			for (var j = 0; j < names.length; j++) {
-				var vals = attrs[names[j]] || [];
-				for (var k = 0; k < vals.length; k++) {
-					if (gbRe.test(vals[k])) return names[j];
-				}
-			}
-		}
-
-		// 3. First attribute on any product in category
-		for (var i = 0; i < inCat.length; i++) {
-			var names = Object.keys(inCat[i].attributes);
-			if (names.length) return names[0];
-		}
-
-		return '';
-	}
-
-	/** All distinct data-attribute values available for a given category */
 	function dataOptionsFor(catName) {
-		var attrName = resolveDataAttrName(catName);
-		if (!attrName) return [];
-
 		var seen = {};
 		d.products.forEach(function (p) {
 			if (catName && !p.categories.includes(catName)) return;
-			var vals = p.attributes[attrName] || [];
-			vals.forEach(function (v) { seen[v] = true; });
+			if (p.display_size) seen[p.display_size] = true;
 		});
 		return sortDataValues(Object.keys(seen));
 	}
 
 	/**
-	 * Find the single product that best matches category + data selection.
-	 * Falls back to the first product in the category if no data match.
+	 * Find the single product matching category + display_size selection.
+	 * Falls back to the first product in the category when no exact match.
 	 */
 	function findProduct() {
 		var inCat = d.products.filter(function (p) {
@@ -361,16 +264,9 @@ function ep_js() {
 		if (!inCat.length) return null;
 		if (!state.dataValue) return inCat[0];
 
-		var attrName = resolveDataAttrName(state.category);
-
-		var exact = inCat.find(function (p) {
-			var vals = (attrName ? p.attributes[attrName] : []) || [];
-			return vals.some(function (v) {
-				return normData(v) === normData(state.dataValue);
-			});
-		});
-
-		return exact || inCat[0];
+		return inCat.find(function (p) {
+			return normData(p.display_size) === normData(state.dataValue);
+		}) || inCat[0];
 	}
 
 	// ── render ───────────────────────────────────────────────────────────────
@@ -387,11 +283,9 @@ function ep_js() {
 	}
 
 	function renderDataDropdown() {
-		var options  = dataOptionsFor(state.category);
-		var attrName = resolveDataAttrName(state.category);
+		var options = dataOptionsFor(state.category);
 
-		// Update the label to the detected attribute name
-		if (dLabel) dLabel.textContent = attrName || 'Data';
+		if (dLabel) dLabel.textContent = 'Data';
 
 		selData.innerHTML = '';
 
@@ -466,7 +360,7 @@ function ep_js() {
 			+ '<div class="flex items-center justify-between gap-2">'
 			+   '<span class="inline-flex items-center gap-1.5 rounded-full bg-indigo-50'
 			+         ' text-indigo-700 text-xs font-semibold px-3 py-1">'
-			+     esc(state.dataValue || '&mdash;')
+			+     (state.dataValue ? esc(state.dataValue) : '&mdash;')
 			+   '</span>'
 			+   '<span class="text-xs text-gray-400">' + esc(p.categories.join(', ')) + '</span>'
 			+ '</div>'

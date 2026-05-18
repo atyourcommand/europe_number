@@ -173,7 +173,7 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB' ) {
 		data-default-data="<?php echo esc_attr( $default_data ); ?>">
 
 		<!-- ── Dropdowns ── -->
-		<div class="flex flex-wrap gap-3 mb-5">
+		<div class="flex flex-wrap gap-3 mb-3">
 
 			<div class="flex-1 min-w-36">
 				<label for="ep-category"
@@ -201,9 +201,15 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB' ) {
 					       disabled:opacity-40 disabled:cursor-not-allowed"
 					disabled>
 				</select>
+				<!-- price lives here, right-aligned under the data dropdown -->
+				<p id="ep-price" class="text-right text-sm text-gray-900 mt-1 min-h-[1.25rem]"></p>
 			</div>
 
 		</div>
+
+		<!-- ── Product title (above card) ── -->
+		<p id="ep-product-title"
+			class="text-base text-center text-gray-700 font-medium mb-3 min-h-[1.5rem]"></p>
 
 		<!-- ── Product card ── -->
 		<div id="ep-card"
@@ -212,9 +218,9 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB' ) {
 			<div id="ep-card-bg"
 				style="position:absolute;inset:0;background-size:cover;background-position:center;
 				       opacity:0;transition:opacity 0.5s ease;pointer-events:none;"></div>
-			<!-- white overlay keeps content readable over any image -->
-			<div id="ep-card-inner"
-				class="relative bg-white/90">
+			<!-- gradient overlay keeps white text readable over any image -->
+			<div class="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60 pointer-events-none"></div>
+			<div id="ep-card-inner" class="relative">
 				<div class="p-6 text-center text-sm text-gray-400">Loading&hellip;</div>
 			</div>
 		</div>
@@ -233,14 +239,16 @@ function ep_js() {
 (function () {
 	'use strict';
 
-	var d      = window.epData;
-	var module = document.getElementById('ep-module');
-	var selCat = document.getElementById('ep-category');
-	var selData= document.getElementById('ep-data');
-	var dLabel = document.getElementById('ep-data-label');
-	var card   = document.getElementById('ep-card');
-	var cardBg = document.getElementById('ep-card-bg');
-	var inner  = document.getElementById('ep-card-inner');
+	var d        = window.epData;
+	var module   = document.getElementById('ep-module');
+	var selCat   = document.getElementById('ep-category');
+	var selData  = document.getElementById('ep-data');
+	var dLabel   = document.getElementById('ep-data-label');
+	var card     = document.getElementById('ep-card');
+	var cardBg   = document.getElementById('ep-card-bg');
+	var inner    = document.getElementById('ep-card-inner');
+	var priceEl  = document.getElementById('ep-price');
+	var titleEl  = document.getElementById('ep-product-title');
 
 	if (!d || !module || !selCat || !selData || !card || !inner) return;
 
@@ -389,8 +397,10 @@ function ep_js() {
 		var p = findProduct();
 
 		if (!p) {
-			inner.innerHTML = '<div class="p-6 text-center text-sm text-gray-400">'
+			inner.innerHTML = '<div class="p-6 text-center text-sm text-white/70 min-h-[220px] flex items-center justify-center">'
 				+ 'No product available for this selection.</div>';
+			if (titleEl) titleEl.textContent = '';
+			if (priceEl) priceEl.innerHTML   = '';
 			return;
 		}
 
@@ -415,6 +425,11 @@ function ep_js() {
 				+ '</button>';
 		}
 
+		// ── Populate elements outside the card ─────────────────────────────
+		if (titleEl) titleEl.textContent = p.title;
+		if (priceEl) priceEl.innerHTML   = p.price_html;
+
+		// ── Badge data ──────────────────────────────────────────────────────
 		var policyBadges = {
 			'calls'      : ['Calls SMS', 'No data'],
 			'calls_data' : ['Calls SMS', 'Data'],
@@ -424,42 +439,30 @@ function ep_js() {
 			? policyBadges[p.traffic_policy]
 			: [];
 		var badgeHtml = badges.map(function (label) {
-			return '<span class="inline-block rounded-full bg-gray-100 text-gray-600'
-				+ ' text-xs font-medium px-2.5 py-1">' + label + '</span>';
+			return '<span class="inline-block rounded-full bg-white/20 text-white'
+				+ ' text-xs font-medium px-2.5 py-1 backdrop-blur-sm">' + label + '</span>';
 		}).join('');
 
 		inner.innerHTML =
-			'<div class="p-6 flex flex-col gap-5">'
+			'<div class="p-6 flex flex-col gap-5 min-h-[220px]">'
 
-			// ── Data size badge + category ──────────────────────────────────
-			+ '<div class="flex items-center justify-between gap-2">'
-			+   '<span class="inline-flex items-center gap-1.5 rounded-full bg-indigo-50'
-			+         ' text-indigo-700 text-xs font-semibold px-3 py-1">'
-			+     (state.dataValue ? esc(state.dataValue) : '&mdash;')
-			+   '</span>'
-			+   '<span class="text-xs text-gray-400">' + esc(p.categories.join(', ')) + '</span>'
-			+ '</div>'
+			// ── Large category name (replaces product title) ────────────────
+			+ '<h2 class="text-white font-bold text-5xl uppercase tracking-wide text-center drop-shadow">'
+			+   esc(state.category || p.categories[0] || '')
+			+ '</h2>'
 
 			// ── Policy badges + expiry ──────────────────────────────────────
 			+ (badgeHtml || p.expiry_days
 				? '<div class="flex flex-wrap items-center gap-2">'
 				+   badgeHtml
-				+   (p.expiry_days ? '<span class="text-xs text-gray-500">' + p.expiry_days + ' days</span>' : '')
+				+   (p.expiry_days
+					? '<span class="text-xs text-white/80">' + p.expiry_days + ' days</span>'
+					: '')
 				+ '</div>'
 				: '')
 
-			// ── Title ───────────────────────────────────────────────────────
-			+ '<h2 class="text-gray-900 font-bold text-xl leading-snug">'
-			+   esc(p.title)
-			+ '</h2>'
-
-			// ── Price ───────────────────────────────────────────────────────
-			+ '<div class="text-2xl font-extrabold text-indigo-700 leading-none">'
-			+   p.price_html
-			+ '</div>'
-
 			// ── CTA ─────────────────────────────────────────────────────────
-			+ '<div>' + btnHtml + '</div>'
+			+ '<div class="mt-auto">' + btnHtml + '</div>'
 
 			+ '</div>';
 

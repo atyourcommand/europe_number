@@ -503,7 +503,7 @@ function ep_js() {
 		}
 
 		// ── Populate elements outside the card ─────────────────────────────
-		if (titleEl) titleEl.textContent = p.title;
+		if (titleEl) titleEl.textContent = '';
 		if (priceEl) priceEl.textContent = p.price > 0
 			? formatPrice(p.price * state.quantity)
 			: '';
@@ -542,6 +542,9 @@ function ep_js() {
 			+ '<h2 class="text-white font-bold text-5xl uppercase tracking-wide text-center drop-shadow">'
 			+   esc(state.category || p.categories[0] || '')
 			+ '</h2>'
+
+			// ── Product name ─────────────────────────────────────────────────
+			+ '<p class="text-white/90 text-sm text-center">' + esc(p.title) + '</p>'
 
 			// ── CTA ─────────────────────────────────────────────────────────
 			+ '<div>' + btnHtml + '</div>'

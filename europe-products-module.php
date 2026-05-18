@@ -173,9 +173,10 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB' ) {
 		data-default-data="<?php echo esc_attr( $default_data ); ?>">
 
 		<!-- ── Dropdowns ── -->
-		<div class="flex flex-wrap gap-3 mb-3">
+		<div class="flex gap-3 mb-3">
 
-			<div class="flex-1 min-w-36">
+			<!-- Category — 50% -->
+			<div class="flex-[2]">
 				<label for="ep-category"
 					class="block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
 					Category
@@ -188,7 +189,8 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB' ) {
 				</select>
 			</div>
 
-			<div class="flex-1 min-w-36">
+			<!-- Data — 25% -->
+			<div class="flex-1 min-w-0">
 				<label id="ep-data-label" for="ep-data"
 					class="block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
 					Data
@@ -203,6 +205,25 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB' ) {
 				</select>
 				<!-- price lives here, right-aligned under the data dropdown -->
 				<p id="ep-price" class="text-right text-sm text-gray-900 mt-1 min-h-[1.25rem]"></p>
+			</div>
+
+			<!-- Quantity — 25% -->
+			<div class="flex-1 min-w-0">
+				<label for="ep-qty"
+					class="block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
+					Qty
+				</label>
+				<select id="ep-qty"
+					class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm
+					       text-gray-900 shadow-sm cursor-pointer
+					       focus:border-indigo-500 focus:outline-none focus:ring-2
+					       focus:ring-indigo-500/30 transition-colors">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+				</select>
 			</div>
 
 		</div>
@@ -243,6 +264,7 @@ function ep_js() {
 	var module   = document.getElementById('ep-module');
 	var selCat   = document.getElementById('ep-category');
 	var selData  = document.getElementById('ep-data');
+	var selQty   = document.getElementById('ep-qty');
 	var dLabel   = document.getElementById('ep-data-label');
 	var card     = document.getElementById('ep-card');
 	var cardBg   = document.getElementById('ep-card-bg');
@@ -257,8 +279,8 @@ function ep_js() {
 	var state = {
 		category  : '',
 		dataValue : '',
+		quantity  : 1,
 		inCart    : {},   // { productId: true }
-		loading   : {},   // { productId: true }
 	};
 
 	// ── helpers ──────────────────────────────────────────────────────────────
@@ -437,8 +459,8 @@ function ep_js() {
 		} else {
 			btnHtml = '<div class="product-action-wrap">'
 				+ '<a href="' + esc(p.add_to_cart_url) + '"'
-				+ ' data-quantity="1"'
-				+ ' class="button product_type_simple add_to_cart_button ajax_add_to_cart"'
+				+ ' data-quantity="' + state.quantity + '"'
+				+ ' class="button product_type_simple add_to_cart_button ajax_add_to_cart w-full block text-center"'
 				+ ' data-product_id="' + p.id + '"'
 				+ ' data-product_sku="' + escAttr(p.sku) + '"'
 				+ ' aria-label="Add to cart: &quot;' + escAttr(p.title) + '&quot;"'
@@ -530,6 +552,13 @@ function ep_js() {
 
 		renderCard();
 	});
+
+	if (selQty) {
+		selQty.addEventListener('change', function () {
+			state.quantity = parseInt(this.value, 10) || 1;
+			renderCard();
+		});
+	}
 
 	// ── init ─────────────────────────────────────────────────────────────────
 

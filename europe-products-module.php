@@ -231,11 +231,11 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB' ) {
 
 			<!-- Price total — ~20% -->
 			<div class="flex-1 min-w-0">
-				<p class="block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
+				<p class="block text-xs font-semibold uppercase tracking-wide text-gray-500 !mb-1">
 					Price
 				</p>
 				<p id="ep-price"
-					class="py-2 text-sm font-semibold text-gray-900 text-right min-h-[2.375rem]"></p>
+					class="py-2 text-sm font-semibold text-gray-900 text-left min-h-[2.375rem]"></p>
 			</div>
 
 		</div>
@@ -246,14 +246,15 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB' ) {
 
 		<!-- ── Product card ── -->
 		<div id="ep-card"
-			class="relative rounded-2xl border border-gray-200 shadow-sm overflow-hidden min-h-[550px] flex flex-col">
+			class="relative rounded-2xl border border-gray-200 shadow-sm overflow-hidden min-h-[550px]">
 			<!-- background image layer — fades independently of the content -->
 			<div id="ep-card-bg"
 				style="position:absolute;inset:0;background-size:cover;background-position:center;
 				       opacity:0;transition:opacity 0.5s ease;pointer-events:none;"></div>
 			<!-- gradient overlay keeps white text readable over any image -->
 			<div class="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60 pointer-events-none"></div>
-			<div id="ep-card-inner" class="relative flex-1 flex flex-col">
+			<!-- inner fills the full card via absolute positioning so flex children have a definite height -->
+			<div id="ep-card-inner" class="absolute inset-0 flex flex-col overflow-hidden">
 				<div class="p-6 text-center text-sm text-gray-400">Loading&hellip;</div>
 			</div>
 		</div>
@@ -449,7 +450,7 @@ function ep_js() {
 		var p = findProduct();
 
 		if (!p) {
-			inner.innerHTML = '<div class="p-6 text-center text-sm text-white/70 min-h-[220px] flex items-center justify-center">'
+			inner.innerHTML = '<div class="flex-1 p-6 flex items-center justify-center text-sm text-white/70">'
 				+ 'No product available for this selection.</div>';
 			if (titleEl) titleEl.textContent = '';
 			if (priceEl) priceEl.innerHTML   = '';
@@ -522,7 +523,7 @@ function ep_js() {
 		}).join('');
 
 		inner.innerHTML =
-			'<div class="p-6 flex flex-col gap-3 flex-1">'
+			'<div class="flex-1 p-6 flex flex-col gap-3">'
 
 			// ── Policy badges + expiry — top of card ────────────────────────
 			+ (badgeHtml || p.expiry_days

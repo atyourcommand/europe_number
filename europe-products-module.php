@@ -213,7 +213,7 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB' ) {
 
 		<!-- ── Product card ── -->
 		<div id="ep-card"
-			class="relative rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+			class="relative rounded-2xl border border-gray-200 shadow-sm overflow-hidden min-h-[550px]">
 			<!-- background image layer — fades independently of the content -->
 			<div id="ep-card-bg"
 				style="position:absolute;inset:0;background-size:cover;background-position:center;
@@ -444,7 +444,7 @@ function ep_js() {
 		}).join('');
 
 		inner.innerHTML =
-			'<div class="p-6 flex flex-col gap-5 min-h-[220px]">'
+			'<div class="p-6 flex flex-col gap-5 min-h-[550px]">'
 
 			// ── Large category name (replaces product title) ────────────────
 			+ '<h2 class="text-white font-bold text-5xl uppercase tracking-wide text-center drop-shadow">'

@@ -522,14 +522,9 @@ function ep_js() {
 		}).join('');
 
 		inner.innerHTML =
-			'<div class="p-6 flex flex-col gap-5 min-h-[550px]">'
+			'<div class="p-6 flex flex-col gap-3 min-h-[550px]">'
 
-			// ── Large category name (replaces product title) ────────────────
-			+ '<h2 class="mt-auto text-white font-bold text-5xl uppercase tracking-wide text-center drop-shadow">'
-			+   esc(state.category || p.categories[0] || '')
-			+ '</h2>'
-
-			// ── Policy badges + expiry ──────────────────────────────────────
+			// ── Policy badges + expiry — top of card ────────────────────────
 			+ (badgeHtml || p.expiry_days
 				? '<div class="flex flex-wrap items-center gap-2">'
 				+   badgeHtml
@@ -537,7 +532,12 @@ function ep_js() {
 					? '<span class="text-xs text-white/80">' + p.expiry_days + ' days</span>'
 					: '')
 				+ '</div>'
-				: '')
+				: '<div></div>')
+
+			// ── Category name — bottom third (mt-auto pushes it down) ───────
+			+ '<h2 class="mt-auto text-white font-bold text-5xl uppercase tracking-wide text-center drop-shadow">'
+			+   esc(state.category || p.categories[0] || '')
+			+ '</h2>'
 
 			// ── CTA ─────────────────────────────────────────────────────────
 			+ '<div>' + btnHtml + '</div>'

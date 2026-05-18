@@ -494,6 +494,7 @@ function ep_js() {
 				+ ' data-success_message="&quot;' + escAttr(p.title) + '&quot; has been added to your cart"'
 				+ ' role="button">'
 				+ 'Add to cart'
+				+ (p.price > 0 ? ' &mdash; ' + esc(formatPrice(p.price * state.quantity)) : '')
 				+ spinnerSvg
 				+ checkSvg
 				+ '</a>'

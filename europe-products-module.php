@@ -156,12 +156,12 @@ function ep_build_payload() {
 		// Add one entry per category as images become available.
 		// Key = WooCommerce category name. Value = filename inside heroBase.
 		'heroBase'    => 'https://europenumber.com/wp-content/uploads/2026/05/',
-		'heroDefault' => 'hero-default-1-300x233.webp',
+		'heroDefault' => 'quick-links-europe-5-600x467.webp',
 		'heroImages'  => [
-			'Europe' => 'hero-europe-1-300x233.webp',
-			'France' => 'hero-france-1-300x233.webp',
-			'Spain'  => 'hero-spain-1-300x233.webp',
-			'UK'     => 'hero-uk-1-300x233.webp',
+			'Europe' => 'quick-links-europe-5-600x467.webp',
+			'France' => 'hero-france-1-600x467.webp',
+			'Spain'  => 'quick-links-spain-5-600x467.webp',
+			'UK'     => 'quick-links-uk-5-600x467.webp',
 		],
 	];
 }

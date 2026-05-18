@@ -131,7 +131,7 @@ function ep_build_payload() {
 			'title'          => $product->get_name(),
 			'sku'            => $product->get_sku(),
 			'add_to_cart_url' => $product->add_to_cart_url(),
-			'price_html'     => $product->get_price_html(),
+			'price'          => (float) $product->get_price(),
 			'categories'     => $cats,
 			'display_size'   => $display_size,
 			'traffic_policy' => $traffic_policy,
@@ -146,6 +146,11 @@ function ep_build_payload() {
 		'products'     => $products,
 		'categories'   => $categories,
 		'cartUrl'      => wc_get_cart_url(),
+		'currency'     => [
+			'symbol'   => get_woocommerce_currency_symbol(),
+			'position' => get_option( 'woocommerce_currency_pos', 'left' ),
+			'decimals' => wc_get_price_decimals(),
+		],
 
 		// ── Hero background images ───────────────────────────────────────────
 		// Add one entry per category as images become available.
@@ -189,7 +194,7 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB' ) {
 				</select>
 			</div>
 
-			<!-- Data — 25% -->
+			<!-- Data — ~20% -->
 			<div class="flex-1 min-w-0">
 				<label id="ep-data-label" for="ep-data"
 					class="block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
@@ -203,11 +208,9 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB' ) {
 					       disabled:opacity-40 disabled:cursor-not-allowed"
 					disabled>
 				</select>
-				<!-- price lives here, right-aligned under the data dropdown -->
-				<p id="ep-price" class="text-right text-sm text-gray-900 mt-1 min-h-[1.25rem]"></p>
 			</div>
 
-			<!-- Quantity — 25% -->
+			<!-- Quantity — ~20% -->
 			<div class="flex-1 min-w-0">
 				<label for="ep-qty"
 					class="block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
@@ -224,6 +227,15 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB' ) {
 					<option value="4">4</option>
 					<option value="5">5</option>
 				</select>
+			</div>
+
+			<!-- Price total — ~20% -->
+			<div class="flex-1 min-w-0">
+				<p class="block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
+					Price
+				</p>
+				<p id="ep-price"
+					class="py-2 text-sm font-semibold text-gray-900 text-right min-h-[2.375rem]"></p>
 			</div>
 
 		</div>
@@ -295,6 +307,19 @@ function ep_js() {
 	/** Escape a string for use inside a double-quoted HTML attribute */
 	function escAttr(str) {
 		return esc(str).replace(/"/g, '&quot;');
+	}
+
+	/** Format a numeric amount using the WooCommerce currency settings */
+	function formatPrice(amount) {
+		var c   = d.currency || {};
+		var sym = c.symbol   || '';
+		var dec = typeof c.decimals === 'number' ? c.decimals : 2;
+		var pos = c.position || 'left';
+		var num = amount.toFixed(dec);
+		if (pos === 'right')       return num + sym;
+		if (pos === 'right_space') return num + ' ' + sym;
+		if (pos === 'left_space')  return sym + ' ' + num;
+		return sym + num;
 	}
 
 	/** Normalise a data-size value so "20 GB" and "20GB" compare equal */
@@ -478,7 +503,9 @@ function ep_js() {
 
 		// ── Populate elements outside the card ─────────────────────────────
 		if (titleEl) titleEl.textContent = p.title;
-		if (priceEl) priceEl.innerHTML   = p.price_html;
+		if (priceEl) priceEl.textContent = p.price > 0
+			? formatPrice(p.price * state.quantity)
+			: '';
 
 		// ── Badge data ──────────────────────────────────────────────────────
 		var policyBadges = {

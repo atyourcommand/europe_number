@@ -158,7 +158,7 @@ function ep_build_payload() {
 		'heroBase'    => 'https://europenumber.com/wp-content/uploads/2026/05/',
 		'heroDefault' => 'hero-default-1-600x467.webp',
 		'heroImages'  => [
-			'Europe' => 'quick-links-europe-5-600x467.webp',
+			'Europe' => 'hero-europe-1-600x467.webp',
 			'France' => 'hero-france-1-600x467.webp',
 			'Spain'  => 'hero-spain-1-600x467.webp',
 			'UK'     => 'hero-uk-1-600x467.webp',

@@ -525,7 +525,7 @@ function ep_js() {
 			'<div class="p-6 flex flex-col gap-5 min-h-[550px]">'
 
 			// ── Large category name (replaces product title) ────────────────
-			+ '<h2 class="text-white font-bold text-5xl uppercase tracking-wide text-center drop-shadow">'
+			+ '<h2 class="mt-auto text-white font-bold text-5xl uppercase tracking-wide text-center drop-shadow">'
 			+   esc(state.category || p.categories[0] || '')
 			+ '</h2>'
 
@@ -540,7 +540,7 @@ function ep_js() {
 				: '')
 
 			// ── CTA ─────────────────────────────────────────────────────────
-			+ '<div class="mt-auto">' + btnHtml + '</div>'
+			+ '<div>' + btnHtml + '</div>'
 
 			+ '</div>';
 

@@ -129,6 +129,8 @@ function ep_build_payload() {
 		$products[] = [
 			'id'             => $id,
 			'title'          => $product->get_name(),
+			'sku'            => $product->get_sku(),
+			'add_to_cart_url' => $product->add_to_cart_url(),
 			'price_html'     => $product->get_price_html(),
 			'categories'     => $cats,
 			'display_size'   => $display_size,
@@ -144,8 +146,6 @@ function ep_build_payload() {
 		'products'     => $products,
 		'categories'   => $categories,
 		'cartUrl'      => wc_get_cart_url(),
-		'storeApiBase' => esc_url_raw( get_rest_url( null, 'wc/store/v1' ) ),
-		'storeNonce'   => wp_create_nonce( 'wc_store_api' ),
 
 		// ── Hero background images ───────────────────────────────────────────
 		// Add one entry per category as images become available.
@@ -268,6 +268,11 @@ function ep_js() {
 		var el = document.createElement('div');
 		el.appendChild(document.createTextNode(String(str)));
 		return el.innerHTML;
+	}
+
+	/** Escape a string for use inside a double-quoted HTML attribute */
+	function escAttr(str) {
+		return esc(str).replace(/"/g, '&quot;');
 	}
 
 	/** Normalise a data-size value so "20 GB" and "20GB" compare equal */
@@ -405,24 +410,48 @@ function ep_js() {
 		}
 
 		var inCart  = state.inCart[p.id];
-		var loading = state.loading[p.id];
+
+		var spinnerSvg = '<span class="kadence-svg-iconset svg-baseline">'
+			+ '<svg class="kadence-svg-icon kadence-spinner-svg" fill="currentColor" version="1.1"'
+			+ ' xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">'
+			+ '<title>Loading</title>'
+			+ '<path d="M16 6h-6l2.243-2.243c-1.133-1.133-2.64-1.757-4.243-1.757s-3.109 0.624-4.243 1.757'
+			+ 'c-1.133 1.133-1.757 2.64-1.757 4.243s0.624 3.109 1.757 4.243c1.133 1.133 2.64 1.757 4.243 1.757'
+			+ 's3.109-0.624 4.243-1.757c0.095-0.095 0.185-0.192 0.273-0.292l1.505 1.317'
+			+ 'c-1.466 1.674-3.62 2.732-6.020 2.732-4.418 0-8-3.582-8-8s3.582-8 8-8'
+			+ 'c2.209 0 4.209 0.896 5.656 2.344l2.343-2.344v6z"></path>'
+			+ '</svg></span>';
+
+		var checkSvg = '<span class="kadence-svg-iconset svg-baseline">'
+			+ '<svg class="kadence-svg-icon kadence-check-svg" fill="currentColor" version="1.1"'
+			+ ' xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">'
+			+ '<title>Done</title>'
+			+ '<path d="M14 2.5l-8.5 8.5-3.5-3.5-1.5 1.5 5 5 10-10z"></path>'
+			+ '</svg></span>';
 
 		var btnHtml;
 		if (inCart) {
 			btnHtml = '<a href="' + esc(d.cartUrl) + '"'
-				+ ' class="block w-full text-center rounded-xl bg-emerald-600 hover:bg-emerald-700'
-				+ ' text-white font-semibold py-3 px-6 transition-colors duration-150">'
+				+ ' class="button product_type_simple block w-full text-center">'
 				+ 'View Cart &rarr;</a>';
 		} else {
-			btnHtml = '<button data-id="' + p.id + '"'
-				+ ' class="ep-atc block w-full rounded-xl bg-indigo-600 hover:bg-indigo-700'
-				+ ' active:bg-indigo-800 text-white font-semibold py-3 px-6'
-				+ ' transition-colors duration-150 cursor-pointer'
-				+ (loading ? ' opacity-60 pointer-events-none' : '') + '"'
-				+ (loading ? ' disabled' : '') + '>'
-				+ (loading ? '<span class="inline-block animate-pulse">Adding&hellip;</span>'
-				           : 'Add to Cart')
-				+ '</button>';
+			btnHtml = '<div class="product-action-wrap">'
+				+ '<a href="' + esc(p.add_to_cart_url) + '"'
+				+ ' data-quantity="1"'
+				+ ' class="button product_type_simple add_to_cart_button ajax_add_to_cart"'
+				+ ' data-product_id="' + p.id + '"'
+				+ ' data-product_sku="' + escAttr(p.sku) + '"'
+				+ ' aria-label="Add to cart: &quot;' + escAttr(p.title) + '&quot;"'
+				+ ' rel="nofollow"'
+				+ ' data-success_message="&quot;' + escAttr(p.title) + '&quot; has been added to your cart"'
+				+ ' role="button">'
+				+ 'Add to cart'
+				+ spinnerSvg
+				+ checkSvg
+				+ '</a>'
+				+ '<span id="woocommerce_loop_add_to_cart_link_describedby_' + p.id + '"'
+				+ ' class="screen-reader-text"></span>'
+				+ '</div>';
 		}
 
 		// ── Populate elements outside the card ─────────────────────────────
@@ -466,45 +495,6 @@ function ep_js() {
 
 			+ '</div>';
 
-		var atcBtn = inner.querySelector('.ep-atc');
-		if (atcBtn) atcBtn.addEventListener('click', handleAddToCart);
-	}
-
-	// ── add-to-cart ──────────────────────────────────────────────────────────
-
-	function handleAddToCart(e) {
-		var btn = e.currentTarget;
-		var id  = parseInt(btn.dataset.id, 10);
-
-		if (state.loading[id]) return;
-		state.loading[id] = true;
-		renderCard();
-
-		fetch(d.storeApiBase + '/cart/add-item', {
-			method     : 'POST',
-			credentials: 'same-origin',
-			headers    : {
-				'Content-Type'        : 'application/json',
-				'X-WC-Store-API-Nonce': d.storeNonce,
-			},
-			body: JSON.stringify({ id: id, quantity: 1 }),
-		})
-		.then(function (r) {
-			if (!r.ok) throw new Error(r.status);
-			return r.json();
-		})
-		.then(function () {
-			state.inCart[id]  = true;
-			state.loading[id] = false;
-			if (typeof jQuery !== 'undefined') {
-				jQuery(document.body).trigger('wc_fragment_refresh');
-			}
-			renderCard();
-		})
-		.catch(function () {
-			state.loading[id] = false;
-			window.location.href = '/?add-to-cart=' + id;
-		});
 	}
 
 	// ── event listeners ──────────────────────────────────────────────────────
@@ -551,6 +541,17 @@ function ep_js() {
 		renderDataDropdown();
 		updateCardBackground(state.category);
 		renderCard();
+
+		// Listen for WooCommerce native AJAX add-to-cart success
+		if (typeof jQuery !== 'undefined') {
+			jQuery(document.body).on('added_to_cart', function (e, fragments, cartHash, $btn) {
+				var id = $btn && parseInt($btn.data('product_id'), 10);
+				if (id) {
+					state.inCart[id] = true;
+					renderCard();
+				}
+			});
+		}
 	}
 
 	if (document.readyState === 'loading') {

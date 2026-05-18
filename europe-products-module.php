@@ -147,7 +147,7 @@ function ep_build_payload() {
 		'categories'   => $categories,
 		'cartUrl'      => wc_get_cart_url(),
 		'currency'     => [
-			'symbol'   => get_woocommerce_currency_symbol(),
+			'symbol'   => html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' ),
 			'position' => get_option( 'woocommerce_currency_pos', 'left' ),
 			'decimals' => wc_get_price_decimals(),
 		],
@@ -246,14 +246,14 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB' ) {
 
 		<!-- ── Product card ── -->
 		<div id="ep-card"
-			class="relative rounded-2xl border border-gray-200 shadow-sm overflow-hidden min-h-[550px]">
+			class="relative rounded-2xl border border-gray-200 shadow-sm overflow-hidden min-h-[550px] flex flex-col">
 			<!-- background image layer — fades independently of the content -->
 			<div id="ep-card-bg"
 				style="position:absolute;inset:0;background-size:cover;background-position:center;
 				       opacity:0;transition:opacity 0.5s ease;pointer-events:none;"></div>
 			<!-- gradient overlay keeps white text readable over any image -->
 			<div class="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60 pointer-events-none"></div>
-			<div id="ep-card-inner" class="relative">
+			<div id="ep-card-inner" class="relative flex-1 flex flex-col">
 				<div class="p-6 text-center text-sm text-gray-400">Loading&hellip;</div>
 			</div>
 		</div>
@@ -522,7 +522,7 @@ function ep_js() {
 		}).join('');
 
 		inner.innerHTML =
-			'<div class="p-6 flex flex-col gap-3 min-h-[550px]">'
+			'<div class="p-6 flex flex-col gap-3 flex-1">'
 
 			// ── Policy badges + expiry — top of card ────────────────────────
 			+ (badgeHtml || p.expiry_days

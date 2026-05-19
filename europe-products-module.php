@@ -322,7 +322,8 @@ function ep_js() {
 		category  : '',
 		dataValue : '',
 		quantity  : 1,
-		inCart    : {},   // { productId: true }
+		mode      : 'data',  // 'data' | 'duration'
+		inCart    : {},
 	};
 
 	// ── helpers ──────────────────────────────────────────────────────────────
@@ -397,11 +398,7 @@ function ep_js() {
 		img.src     = target;
 	}
 
-	/**
-	 * Unique display_size values for products in the given category,
-	 * sorted numerically (1GB < 5GB < 10GB < 20GB).
-	 * Source: meta:Display size on each WooCommerce product.
-	 */
+	/** Unique display_size values for a category, sorted numerically. */
 	function dataOptionsFor(catName) {
 		var seen = {};
 		d.products.forEach(function (p) {
@@ -411,10 +408,17 @@ function ep_js() {
 		return sortDataValues(Object.keys(seen));
 	}
 
-	/**
-	 * Find the single product matching category + display_size selection.
-	 * Falls back to the first product in the category when no exact match.
-	 */
+	/** Unique expiry_days values for a category, sorted ascending. Used when display_size is absent. */
+	function durationOptionsFor(catName) {
+		var seen = {};
+		d.products.forEach(function (p) {
+			if (catName && !p.categories.includes(catName)) return;
+			if (p.expiry_days) seen[p.expiry_days] = true;
+		});
+		return Object.keys(seen).map(Number).sort(function (a, b) { return a - b; });
+	}
+
+	/** Find the product matching the current state, respecting data vs duration mode. */
 	function findProduct() {
 		var inCat = d.products.filter(function (p) {
 			return !state.category || p.categories.includes(state.category);
@@ -422,6 +426,12 @@ function ep_js() {
 
 		if (!inCat.length) return null;
 		if (!state.dataValue) return inCat[0];
+
+		if (state.mode === 'duration') {
+			return inCat.find(function (p) {
+				return p.expiry_days === parseInt(state.dataValue, 10);
+			}) || inCat[0];
+		}
 
 		return inCat.find(function (p) {
 			return normData(p.display_size) === normData(state.dataValue);
@@ -443,37 +453,62 @@ function ep_js() {
 	}
 
 	function renderDataDropdown() {
-		var options = dataOptionsFor(state.category);
-
-		if (dLabel) dLabel.textContent = 'Data';
+		var dataOpts     = dataOptionsFor(state.category);
+		var durationOpts = dataOpts.length ? [] : durationOptionsFor(state.category);
 
 		selData.innerHTML = '';
 
-		if (!options.length) {
-			var placeholder = document.createElement('option');
-			placeholder.value       = '';
+		if (dataOpts.length) {
+			// ── Data mode ────────────────────────────────────────────────────
+			state.mode = 'data';
+			if (dLabel) dLabel.textContent = 'Data';
+
+			dataOpts.forEach(function (v) {
+				var o         = document.createElement('option');
+				o.value       = v;
+				o.textContent = v;
+				if (normData(v) === normData(state.dataValue)) o.selected = true;
+				selData.appendChild(o);
+			});
+
+			var matched = dataOpts.find(function (v) {
+				return normData(v) === normData(state.dataValue);
+			});
+			state.dataValue  = matched || dataOpts[dataOpts.length - 1] || '';
+			selData.value    = state.dataValue;
+			selData.disabled = false;
+
+		} else if (durationOpts.length) {
+			// ── Duration mode — no display_size, use expiry_days ─────────────
+			state.mode = 'duration';
+			if (dLabel) dLabel.textContent = 'Duration';
+
+			durationOpts.forEach(function (v) {
+				var o         = document.createElement('option');
+				o.value       = v;
+				o.textContent = v + ' days';
+				if (parseInt(state.dataValue, 10) === v) o.selected = true;
+				selData.appendChild(o);
+			});
+
+			var matchedDur = durationOpts.find(function (v) {
+				return parseInt(state.dataValue, 10) === v;
+			});
+			state.dataValue  = String(matchedDur || durationOpts[0] || '');
+			selData.value    = state.dataValue;
+			selData.disabled = false;
+
+		} else {
+			// ── Nothing available ─────────────────────────────────────────────
+			state.mode = 'data';
+			if (dLabel) dLabel.textContent = 'Data';
+			var placeholder       = document.createElement('option');
+			placeholder.value     = '';
 			placeholder.textContent = 'N/A';
 			selData.appendChild(placeholder);
 			selData.disabled = true;
 			state.dataValue  = '';
-			return;
 		}
-
-		options.forEach(function (v) {
-			var o         = document.createElement('option');
-			o.value       = v;
-			o.textContent = v;
-			if (normData(v) === normData(state.dataValue)) o.selected = true;
-			selData.appendChild(o);
-		});
-
-		// Sync state.dataValue — prefer exact match, then last (largest) option
-		var matched = options.find(function (v) {
-			return normData(v) === normData(state.dataValue);
-		});
-		state.dataValue  = matched || options[options.length - 1] || '';
-		selData.value    = state.dataValue;
-		selData.disabled = false;
 	}
 
 	function renderCard() {

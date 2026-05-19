@@ -560,7 +560,7 @@ function ep_js() {
 			+   '</div>'
 			+   (d.brandIcon
 				? '<img src="' + esc(d.brandIcon) + '" alt="" aria-hidden="true"'
-				+ ' class="w-8 h-8 object-contain flex-shrink-0 opacity-90">'
+				+ ' class="w-8 h-8 object-contain flex-shrink-0 opacity-90 invert">'
 				: '')
 			+ '</div>'
 

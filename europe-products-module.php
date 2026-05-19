@@ -179,7 +179,11 @@ function ep_build_payload() {
 			'Spain'  => 'hero-spain-1-600x467.webp',
 			'UK'     => 'hero-uk-1-600x467.webp',
 		],
-		'brandIcon'   => 'https://europenumber.com/wp-content/uploads/2025/12/favicon_black.png',
+		'brandIcon'   => ( function () {
+			$id  = attachment_url_to_postid( 'https://europenumber.com/wp-content/uploads/2025/12/favicon_black.png' );
+			$src = $id ? wp_get_attachment_image_src( $id, 'thumbnail' ) : false;
+			return $src ? $src[0] : 'https://europenumber.com/wp-content/uploads/2025/12/favicon_black.png';
+		} )(),
 	];
 }
 
@@ -546,7 +550,7 @@ function ep_js() {
 			: [];
 		var badgeHtml = badges.map(function (label) {
 			return '<span class="inline-block rounded-full bg-white/20 text-white'
-				+ ' text-xs font-medium px-2.5 py-1 backdrop-blur-sm">' + label + '</span>';
+				+ ' text-xs lg:text-sm font-bold px-2.5 py-1 backdrop-blur-sm">' + label + '</span>';
 		}).join('');
 
 		inner.innerHTML =
@@ -556,11 +560,11 @@ function ep_js() {
 			+ '<div class="flex items-start justify-between gap-2">'
 			+   '<div class="flex flex-wrap items-center gap-2">'
 			+     badgeHtml
-			+     (p.expiry_days ? '<span class="text-xs text-white/80">' + p.expiry_days + ' days</span>' : '')
+			+     (p.expiry_days ? '<span class="text-xs lg:text-sm font-bold text-white/80">' + p.expiry_days + ' days</span>' : '')
 			+   '</div>'
 			+   (d.brandIcon
 				? '<img src="' + esc(d.brandIcon) + '" alt="" aria-hidden="true"'
-				+ ' class="w-8 h-8 object-contain flex-shrink-0 opacity-90 invert">'
+				+ ' class="w-8 h-8 object-contain flex-shrink-0 opacity-90">'
 				: '')
 			+ '</div>'
 

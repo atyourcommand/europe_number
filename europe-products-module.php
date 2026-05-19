@@ -50,6 +50,18 @@ add_shortcode( 'europe_products', function ( $atts ) {
 		'europe_products'
 	);
 
+	// On a product category page, override the default and lock the dropdown.
+	$default_category = $atts['category'];
+	$disable_category = false;
+
+	if ( function_exists( 'is_product_category' ) && is_product_category() ) {
+		$term = get_queried_object();
+		if ( $term instanceof WP_Term ) {
+			$default_category = $term->name;
+			$disable_category = true;
+		}
+	}
+
 	if ( ! wp_script_is( 'tailwind-cdn', 'enqueued' ) ) {
 		wp_enqueue_script( 'tailwind-cdn', 'https://cdn.tailwindcss.com', [], null, false );
 	}
@@ -66,7 +78,7 @@ add_shortcode( 'europe_products', function ( $atts ) {
 		}, 20 );
 	}
 
-	return ep_html( $atts['category'], $atts['default_data'] );
+	return ep_html( $default_category, $atts['default_data'], $disable_category );
 } );
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -169,13 +181,14 @@ function ep_build_payload() {
 // ─────────────────────────────────────────────────────────────────────────────
 // HTML shell
 // ─────────────────────────────────────────────────────────────────────────────
-function ep_html( $default_category = 'Europe', $default_data = '30GB' ) {
+function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable_category = false ) {
 	ob_start();
 	?>
 	<div id="ep-module"
 		class="w-full max-w-lg mx-auto font-sans"
 		data-default-category="<?php echo esc_attr( $default_category ); ?>"
-		data-default-data="<?php echo esc_attr( $default_data ); ?>">
+		data-default-data="<?php echo esc_attr( $default_data ); ?>"
+		data-disable-category="<?php echo $disable_category ? 'true' : 'false'; ?>">
 
 		<!-- ── Dropdowns ── -->
 		<div class="flex gap-3 mb-3">
@@ -190,7 +203,8 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB' ) {
 					class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm
 					       text-gray-900 shadow-sm cursor-pointer
 					       focus:border-indigo-500 focus:outline-none focus:ring-2
-					       focus:ring-indigo-500/30 transition-colors">
+					       focus:ring-indigo-500/30 transition-colors
+					       disabled:opacity-60 disabled:cursor-not-allowed">
 				</select>
 			</div>
 
@@ -286,6 +300,8 @@ function ep_js() {
 	var titleEl  = document.getElementById('ep-product-title');
 
 	if (!d || !module || !selCat || !selData || !card || !inner) return;
+
+	var disableCat = module.dataset.disableCategory === 'true';
 
 	// ── state ────────────────────────────────────────────────────────────────
 
@@ -410,6 +426,7 @@ function ep_js() {
 			if (c === state.category) o.selected = true;
 			selCat.appendChild(o);
 		});
+		selCat.disabled = disableCat;
 	}
 
 	function renderDataDropdown() {

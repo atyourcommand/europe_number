@@ -24,13 +24,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Tailwind CDN — registered early so any add_action can enqueue it later
+// Tailwind CDN — disabled; WindPress compiles Tailwind instead
 // ─────────────────────────────────────────────────────────────────────────────
+/* Tailwind CDN disabled — WindPress compiles Tailwind instead
 add_action( 'wp_enqueue_scripts', function () {
 	if ( ! wp_script_is( 'tailwind-cdn', 'registered' ) ) {
 		wp_register_script( 'tailwind-cdn', 'https://cdn.tailwindcss.com', [], null, false );
 	}
 }, 5 );
+*/
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Shortcode
@@ -62,9 +64,11 @@ add_shortcode( 'europe_products', function ( $atts ) {
 		}
 	}
 
+	/* Tailwind CDN disabled — WindPress compiles Tailwind instead
 	if ( ! wp_script_is( 'tailwind-cdn', 'enqueued' ) ) {
 		wp_enqueue_script( 'tailwind-cdn', 'https://cdn.tailwindcss.com', [], null, false );
 	}
+	*/
 
 	// Build payload and inject JS once per page, even if shortcode appears twice.
 	static $injected = false;
@@ -184,19 +188,22 @@ function ep_build_payload() {
 function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable_category = false ) {
 	ob_start();
 	?>
+	<div class="site-container">
 	<div id="ep-module"
-		class="w-full max-w-lg mx-auto font-sans"
+		class="w-full max-w-lg lg:max-w-4xl mx-auto font-sans"
 		data-default-category="<?php echo esc_attr( $default_category ); ?>"
 		data-default-data="<?php echo esc_attr( $default_data ); ?>"
 		data-disable-category="<?php echo $disable_category ? 'true' : 'false'; ?>">
 
+		<p aria-hidden="true" class="text-center text-base/7 whitespace-pre max-sm:px-4 !mb-[5px]"><small>- Choose your eSIM -</small></p>
+
 		<!-- ── Dropdowns ── -->
 		<div class="flex gap-3 mb-3">
 
-			<!-- Category — 50% -->
-			<div class="flex-[2]">
+			<!-- Category -->
+			<div class="flex-1">
 				<label for="ep-category"
-					class="block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
+					class="hidden block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
 					Category
 				</label>
 				<select id="ep-category"
@@ -208,10 +215,10 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 				</select>
 			</div>
 
-			<!-- Data — ~20% -->
+			<!-- Data -->
 			<div class="flex-1 min-w-0">
 				<label id="ep-data-label" for="ep-data"
-					class="block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
+					class="hidden block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
 					Data
 				</label>
 				<select id="ep-data"
@@ -224,10 +231,10 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 				</select>
 			</div>
 
-			<!-- Quantity — ~20% -->
+			<!-- Quantity -->
 			<div class="flex-1 min-w-0">
 				<label for="ep-qty"
-					class="block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
+					class="hidden block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
 					Qty
 				</label>
 				<select id="ep-qty"
@@ -243,9 +250,9 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 				</select>
 			</div>
 
-			<!-- Price total — ~20% -->
+			<!-- Price total -->
 			<div class="flex-1 min-w-0">
-				<p class="block text-xs font-semibold uppercase tracking-wide text-gray-500 !mb-1">
+				<p class="hidden block text-xs font-semibold uppercase tracking-wide text-gray-500 !mb-1">
 					Price
 				</p>
 				<p id="ep-price"
@@ -256,7 +263,7 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 
 		<!-- ── Product title (above card) ── -->
 		<p id="ep-product-title"
-			class="text-base text-center text-gray-700 font-medium mb-3 min-h-[1.5rem]"></p>
+			class="hidden text-base text-center text-gray-700 font-medium mb-3 min-h-[1.5rem]"></p>
 
 		<!-- ── Product card ── -->
 		<div id="ep-card"
@@ -273,6 +280,7 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 			</div>
 		</div>
 
+	</div>
 	</div>
 	<?php
 	return ob_get_clean();
@@ -557,7 +565,7 @@ function ep_js() {
 			+ '<div class="flex-1"></div>'
 
 			// ── Category name — bottom third ────────────────────────────────
-			+ '<h2 class="text-white font-bold text-5xl uppercase tracking-wide text-center drop-shadow">'
+			+ '<h2 class="!text-white !font-bold !text-5xl uppercase tracking-wide text-center drop-shadow">'
 			+   esc(state.category || p.categories[0] || '')
 			+ '</h2>'
 

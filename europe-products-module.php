@@ -179,6 +179,7 @@ function ep_build_payload() {
 			'Spain'  => 'hero-spain-1-600x467.webp',
 			'UK'     => 'hero-uk-1-600x467.webp',
 		],
+		'brandIcon'   => 'https://europenumber.com/wp-content/uploads/2025/12/favicon_black.png',
 	];
 }
 
@@ -551,15 +552,17 @@ function ep_js() {
 		inner.innerHTML =
 			'<div class="flex-1 p-6 flex flex-col gap-3">'
 
-			// ── Policy badges + expiry — top of card ────────────────────────
-			+ (badgeHtml || p.expiry_days
-				? '<div class="flex flex-wrap items-center gap-2">'
-				+   badgeHtml
-				+   (p.expiry_days
-					? '<span class="text-xs text-white/80">' + p.expiry_days + ' days</span>'
-					: '')
-				+ '</div>'
-				: '<div></div>')
+			// ── Top row: pills left, brand icon right ───────────────────────
+			+ '<div class="flex items-start justify-between gap-2">'
+			+   '<div class="flex flex-wrap items-center gap-2">'
+			+     badgeHtml
+			+     (p.expiry_days ? '<span class="text-xs text-white/80">' + p.expiry_days + ' days</span>' : '')
+			+   '</div>'
+			+   (d.brandIcon
+				? '<img src="' + esc(d.brandIcon) + '" alt="" aria-hidden="true"'
+				+ ' class="w-8 h-8 object-contain flex-shrink-0 opacity-90">'
+				: '')
+			+ '</div>'
 
 			// ── Spacer — pushes heading + CTA to bottom ────────────────────
 			+ '<div class="flex-1"></div>'

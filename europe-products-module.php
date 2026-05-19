@@ -124,8 +124,8 @@ function ep_build_payload() {
 
 		// Data size — CSV column "meta:Display size" (numeric) + "meta:Display units" (e.g. "GB")
 		// WooCommerce CSV importers may store the key with or without the "meta:" prefix.
-		$display_size  = ep_get_meta( $id, 'display size', 'meta:Display size', 'Display size', 'display_size' );
-		$display_units = ep_get_meta( $id, 'display units', 'meta:Display units', 'Display units', 'display_units' );
+		$display_size  = trim( ep_get_meta( $id, 'display size', 'meta:Display size', 'Display size', 'display_size' ) );
+		$display_units = trim( ep_get_meta( $id, 'display units', 'meta:Display units', 'Display units', 'display_units' ) );
 		if ( $display_size && $display_units ) {
 			$display_size = $display_size . $display_units;   // e.g. "20" + "GB" → "20GB"
 		} elseif ( $display_size && is_numeric( $display_size ) ) {
@@ -403,7 +403,8 @@ function ep_js() {
 		var seen = {};
 		d.products.forEach(function (p) {
 			if (catName && !p.categories.includes(catName)) return;
-			if (p.display_size) seen[p.display_size] = true;
+			var ds = p.display_size && p.display_size.trim();
+			if (ds) seen[ds] = true;
 		});
 		return sortDataValues(Object.keys(seen));
 	}

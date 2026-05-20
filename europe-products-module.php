@@ -193,6 +193,72 @@ function ep_build_payload() {
 function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable_category = false ) {
 	ob_start();
 	?>
+	<style>
+	/* ── Pill selects — override any theme styles ─────────────────────────── */
+	#ep-module select {
+		-webkit-appearance: none !important;
+		appearance: none !important;
+		background-color: rgba(0,0,0,0.5) !important;
+		-webkit-backdrop-filter: blur(8px) !important;
+		backdrop-filter: blur(8px) !important;
+		border: 1px solid rgba(255,255,255,0.3) !important;
+		border-radius: 9999px !important;
+		color: #ffffff !important;
+		cursor: pointer !important;
+		font-size: 0.875rem !important;
+		padding: 0.5rem 2rem 0.5rem 1rem !important;
+		width: 100% !important;
+		box-shadow: none !important;
+		outline: none !important;
+	}
+	#ep-module select:focus {
+		background-color: rgba(0,0,0,0.5) !important;
+		border-color: #ffffff !important;
+		box-shadow: none !important;
+		outline: none !important;
+	}
+	#ep-module select:disabled {
+		opacity: 0.4 !important;
+		cursor: not-allowed !important;
+	}
+	#ep-module select option {
+		background-color: #111111 !important;
+		color: #ffffff !important;
+	}
+
+	/* ── Glass pill button — override theme .button styles ───────────────── */
+	#ep-card-btn a.button,
+	#ep-card-btn .button {
+		display: block !important;
+		width: 100% !important;
+		text-align: center !important;
+		background-color: rgba(0,0,0,0.6) !important;
+		-webkit-backdrop-filter: blur(8px) !important;
+		backdrop-filter: blur(8px) !important;
+		border: 1px solid rgba(255,255,255,1) !important;
+		border-radius: 9999px !important;
+		color: #ffffff !important;
+		cursor: pointer !important;
+		font-size: 0.875rem !important;
+		font-weight: 600 !important;
+		letter-spacing: 0.03em !important;
+		padding: 0.65rem 1.5rem !important;
+		text-decoration: none !important;
+		transition: background-color 0.2s ease !important;
+	}
+	#ep-card-btn a.button:hover,
+	#ep-card-btn .button:hover {
+		background-color: rgba(0,0,0,0.8) !important;
+		color: #ffffff !important;
+		text-decoration: none !important;
+	}
+	#ep-card-btn a.button:focus,
+	#ep-card-btn .button:focus {
+		outline: none !important;
+		box-shadow: 0 0 0 2px rgba(255,255,255,0.5) !important;
+	}
+	</style>
+
 	<div class="site-container">
 	<div id="ep-module"
 		class="w-full max-w-lg lg:max-w-4xl mx-auto font-sans"
@@ -227,33 +293,19 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 
 						<!-- Category -->
 						<div class="relative flex-1">
-							<select id="ep-category" aria-label="Category"
-								class="w-full appearance-none bg-black/50 backdrop-blur-sm border border-white/30
-								       text-white rounded-full px-4 py-2 text-sm cursor-pointer
-								       focus:outline-none focus:ring-1 focus:ring-white/50
-								       disabled:opacity-60 disabled:cursor-not-allowed">
-							</select>
+							<select id="ep-category" aria-label="Category"></select>
 							<span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white/70 text-xs" aria-hidden="true">&#9660;</span>
 						</div>
 
 						<!-- Data / Duration -->
 						<div class="relative flex-1 min-w-0">
-							<select id="ep-data" aria-label="Data"
-								class="w-full appearance-none bg-black/50 backdrop-blur-sm border border-white/30
-								       text-white rounded-full px-4 py-2 text-sm cursor-pointer
-								       focus:outline-none focus:ring-1 focus:ring-white/50
-								       disabled:opacity-40 disabled:cursor-not-allowed"
-								disabled>
-							</select>
+							<select id="ep-data" aria-label="Data" disabled></select>
 							<span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white/70 text-xs" aria-hidden="true">&#9660;</span>
 						</div>
 
 						<!-- Qty -->
 						<div class="relative min-w-[4.5rem]">
-							<select id="ep-qty" aria-label="Quantity"
-								class="w-full appearance-none bg-black/50 backdrop-blur-sm border border-white/30
-								       text-white rounded-full px-4 py-2 text-sm cursor-pointer
-								       focus:outline-none focus:ring-1 focus:ring-white/50">
+							<select id="ep-qty" aria-label="Quantity">
 								<option value="1">1</option>
 								<option value="2">2</option>
 								<option value="3">3</option>

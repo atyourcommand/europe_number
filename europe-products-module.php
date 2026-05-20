@@ -199,6 +199,7 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 		-webkit-appearance: none !important;
 		appearance: none !important;
 		background-color: rgba(0,0,0,0.5) !important;
+		background-image: none !important;
 		-webkit-backdrop-filter: blur(8px) !important;
 		backdrop-filter: blur(8px) !important;
 		border: 1px solid rgba(255,255,255,0.3) !important;
@@ -235,7 +236,7 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 		background-color: rgba(0,0,0,0.6) !important;
 		-webkit-backdrop-filter: blur(8px) !important;
 		backdrop-filter: blur(8px) !important;
-		border: 1px solid rgba(255,255,255,1) !important;
+		border: 1px solid rgba(255,255,255,0.3) !important;
 		border-radius: 9999px !important;
 		color: #ffffff !important;
 		cursor: pointer !important;

@@ -405,35 +405,16 @@ function ep_js() {
 
 	// ── hero background ──────────────────────────────────────────────────────
 
-	var bgSeq = 0; // prevents stale async loads from overwriting a newer image
-
 	function updateCardBackground(catName) {
 		if (!cardBg) return;
-
-		var seq      = ++bgSeq;
-		var base     = d.heroBase    || '';
-		var fallback = base + (d.heroDefault || 'hero-default-1-300x233.webp');
+		var base     = d.heroBase || '';
 		var filename = d.heroImages && d.heroImages[catName];
-		var target   = filename ? base + filename : fallback;
-
+		var url      = base + (filename || d.heroDefault || '');
 		cardBg.style.opacity = '0';
-
-		function apply(url) {
-			if (seq !== bgSeq) return; // a newer call already won
+		setTimeout(function () {
 			cardBg.style.backgroundImage = 'url(' + url + ')';
-			cardBg.style.opacity         = '1';
-		}
-
-		if (target === fallback) {
-			// No custom image for this category — use default immediately
-			setTimeout(function () { apply(fallback); }, 20);
-			return;
-		}
-
-		var img    = new Image();
-		img.onload  = function () { apply(target); };
-		img.onerror = function () { apply(fallback); };
-		img.src     = target;
+			cardBg.style.opacity = '1';
+		}, 500);
 	}
 
 	/** Unique display_size values for a category, sorted numerically. */

@@ -262,26 +262,26 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 	/* ── Brand icon speech bubble ─────────────────────────────────────────── */
 	.ep-bubble {
 		position: absolute;
-		bottom: calc(100% + 7px);
+		top: calc(100% + 7px);
 		right: 0;
 		background: #ffffff;
 		color: #111111;
 		font-size: 0.68rem;
 		font-weight: 700;
-		white-space: nowrap;
+		text-align: center;
 		padding: 5px 9px;
 		border-radius: 10px;
 		box-shadow: 0 2px 10px rgba(0,0,0,0.25);
-		line-height: 1.3;
+		line-height: 1.4;
 		pointer-events: none;
 	}
 	.ep-bubble::after {
 		content: '';
 		position: absolute;
-		top: 100%;
+		bottom: 100%;
 		right: 9px;
 		border: 5px solid transparent;
-		border-top-color: #ffffff;
+		border-bottom-color: #ffffff;
 	}
 	</style>
 
@@ -632,7 +632,7 @@ function ep_js() {
 			+   '</div>'
 			+   (d.brandIcon
 				? '<div class="relative flex-shrink-0">'
-				+ '<div class="ep-bubble">Try our new eSIM builder</div>'
+				+ '<div class="ep-bubble">Try our new<br>eSIM builder</div>'
 				+ '<a href="https://www.instagram.com/europe_number/" target="_blank" rel="noopener noreferrer" aria-label="Europe Number on Instagram">'
 				+ '<img src="' + esc(d.brandIcon) + '" alt="" aria-hidden="true"'
 				+ ' class="w-8 h-8 object-contain opacity-90">'

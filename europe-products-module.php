@@ -606,8 +606,10 @@ function ep_js() {
 			+     (p.expiry_days ? '<span class="text-xs lg:text-sm font-bold text-white/80">' + p.expiry_days + ' days</span>' : '')
 			+   '</div>'
 			+   (d.brandIcon
-				? '<img src="' + esc(d.brandIcon) + '" alt="" aria-hidden="true"'
+				? '<a href="https://www.instagram.com/europe_number/" target="_blank" rel="noopener noreferrer" aria-label="Europe Number on Instagram">'
+				+ '<img src="' + esc(d.brandIcon) + '" alt="" aria-hidden="true"'
 				+ ' class="w-8 h-8 object-contain flex-shrink-0 opacity-90">'
+				+ '</a>'
 				: '')
 			+ '</div>'
 

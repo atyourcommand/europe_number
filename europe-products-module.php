@@ -630,7 +630,7 @@ function ep_js() {
 			+   '</div>'
 			+   (d.brandIcon
 				? '<div class="relative flex-shrink-0">'
-				+ '<div class="ep-bubble">Try our new<br>eSIM builder</div>'
+				+ '<div class="ep-bubble">Try our<br>eSIM builder</div>'
 				+ '<a href="https://www.instagram.com/europe_number/" target="_blank" rel="noopener noreferrer" aria-label="Europe Number on Instagram">'
 				+ '<img src="' + esc(d.brandIcon) + '" alt="" aria-hidden="true"'
 				+ ' class="w-8 h-8 object-contain opacity-90">'

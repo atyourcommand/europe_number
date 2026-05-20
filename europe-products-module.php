@@ -292,10 +292,8 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 		data-default-data="<?php echo esc_attr( $default_data ); ?>"
 		data-disable-category="<?php echo $disable_category ? 'true' : 'false'; ?>">
 
-		<p aria-hidden="true" class="text-center text-base/7 whitespace-pre max-sm:px-4 !mb-[5px]"><small>- Choose your eSIM -</small></p>
-
 		<!-- ── Product card ── -->
-		<div id="ep-card"
+		<div id="ep-card" style="margin-top:30px;"
 			class="relative rounded-2xl border border-gray-200 shadow-sm overflow-hidden min-h-[550px]">
 			<!-- background image layer — fades independently of the content -->
 			<div id="ep-card-bg"

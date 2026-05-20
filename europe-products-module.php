@@ -106,7 +106,7 @@ function ep_get_meta( $id, ...$keys ) {
 
 function ep_build_payload() {
 
-	$raw      = wc_get_products( [ 'limit' => -1, 'status' => 'publish' ] );
+	$raw      = wc_get_products( [ 'limit' => -1, 'status' => 'publish', 'stock_status' => 'instock' ] );
 	$products = [];
 	$cat_set  = [];
 

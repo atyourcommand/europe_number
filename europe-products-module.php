@@ -287,7 +287,7 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 				</div>
 
 				<!-- Static controls: pill selects + button — never re-rendered by JS -->
-				<div id="ep-card-controls" class="px-4 pb-5 flex flex-col gap-3">
+				<div id="ep-card-controls" class="px-4 pb-5 flex flex-col gap-3 w-full max-w-[510px] mx-auto">
 
 					<!-- Dropdown row -->
 					<div class="flex gap-2">

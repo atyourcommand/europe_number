@@ -258,6 +258,31 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 		outline: none !important;
 		box-shadow: 0 0 0 2px rgba(255,255,255,0.5) !important;
 	}
+
+	/* ── Brand icon speech bubble ─────────────────────────────────────────── */
+	.ep-bubble {
+		position: absolute;
+		bottom: calc(100% + 7px);
+		right: 0;
+		background: #ffffff;
+		color: #111111;
+		font-size: 0.68rem;
+		font-weight: 700;
+		white-space: nowrap;
+		padding: 5px 9px;
+		border-radius: 10px;
+		box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+		line-height: 1.3;
+		pointer-events: none;
+	}
+	.ep-bubble::after {
+		content: '';
+		position: absolute;
+		top: 100%;
+		right: 9px;
+		border: 5px solid transparent;
+		border-top-color: #ffffff;
+	}
 	</style>
 
 	<div class="site-container">
@@ -606,10 +631,13 @@ function ep_js() {
 			+     (p.expiry_days ? '<span class="text-xs lg:text-sm font-bold text-white/80">' + p.expiry_days + ' days</span>' : '')
 			+   '</div>'
 			+   (d.brandIcon
-				? '<a href="https://www.instagram.com/europe_number/" target="_blank" rel="noopener noreferrer" aria-label="Europe Number on Instagram">'
+				? '<div class="relative flex-shrink-0">'
+				+ '<div class="ep-bubble">Try our new eSIM builder</div>'
+				+ '<a href="https://www.instagram.com/europe_number/" target="_blank" rel="noopener noreferrer" aria-label="Europe Number on Instagram">'
 				+ '<img src="' + esc(d.brandIcon) + '" alt="" aria-hidden="true"'
-				+ ' class="w-8 h-8 object-contain flex-shrink-0 opacity-90">'
+				+ ' class="w-8 h-8 object-contain opacity-90">'
 				+ '</a>'
+				+ '</div>'
 				: '')
 			+ '</div>'
 

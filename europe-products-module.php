@@ -586,8 +586,7 @@ function ep_js() {
 				+ ' class="button product_type_simple block w-full text-center">'
 				+ 'View Cart &rarr;</a>';
 		} else {
-			btnHtml = '<div class="product-action-wrap">'
-				+ '<a href="' + esc(p.add_to_cart_url) + '"'
+			btnHtml = '<a href="' + esc(p.add_to_cart_url) + '"'
 				+ ' data-quantity="' + state.quantity + '"'
 				+ ' class="button product_type_simple add_to_cart_button ajax_add_to_cart w-full block text-center"'
 				+ ' data-product_id="' + p.id + '"'
@@ -600,10 +599,7 @@ function ep_js() {
 				+ (p.price > 0 ? ' &mdash; ' + esc(formatPrice(p.price * state.quantity)) : '')
 				+ spinnerSvg
 				+ checkSvg
-				+ '</a>'
-				+ '<span id="woocommerce_loop_add_to_cart_link_describedby_' + p.id + '"'
-				+ ' class="screen-reader-text"></span>'
-				+ '</div>';
+				+ '</a>';
 		}
 
 		// ── Badge data ──────────────────────────────────────────────────────

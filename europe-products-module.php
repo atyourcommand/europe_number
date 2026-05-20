@@ -202,74 +202,6 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 
 		<p aria-hidden="true" class="text-center text-base/7 whitespace-pre max-sm:px-4 !mb-[5px]"><small>- Choose your eSIM -</small></p>
 
-		<!-- ── Dropdowns ── -->
-		<div class="flex gap-3 mb-3">
-
-			<!-- Category -->
-			<div class="flex-1">
-				<label for="ep-category"
-					class="hidden block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
-					Category
-				</label>
-				<select id="ep-category"
-					class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm
-					       text-gray-900 shadow-sm cursor-pointer
-					       focus:border-indigo-500 focus:outline-none focus:ring-2
-					       focus:ring-indigo-500/30 transition-colors
-					       disabled:opacity-60 disabled:cursor-not-allowed">
-				</select>
-			</div>
-
-			<!-- Data -->
-			<div class="flex-1 min-w-0">
-				<label id="ep-data-label" for="ep-data"
-					class="hidden block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
-					Data
-				</label>
-				<select id="ep-data"
-					class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm
-					       text-gray-900 shadow-sm cursor-pointer
-					       focus:border-indigo-500 focus:outline-none focus:ring-2
-					       focus:ring-indigo-500/30 transition-colors
-					       disabled:opacity-40 disabled:cursor-not-allowed"
-					disabled>
-				</select>
-			</div>
-
-			<!-- Quantity -->
-			<div class="flex-1 min-w-0">
-				<label for="ep-qty"
-					class="hidden block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
-					Qty
-				</label>
-				<select id="ep-qty"
-					class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm
-					       text-gray-900 shadow-sm cursor-pointer
-					       focus:border-indigo-500 focus:outline-none focus:ring-2
-					       focus:ring-indigo-500/30 transition-colors">
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
-				</select>
-			</div>
-
-			<!-- Price total -->
-			<div class="flex-1 min-w-0">
-				<p class="hidden block text-xs font-semibold uppercase tracking-wide text-gray-500 !mb-1">
-					Price
-				</p>
-				<p id="ep-price"
-					class="py-2 text-sm font-semibold text-gray-900 text-left min-h-[2.375rem]"></p>
-			</div>
-
-		</div>
-
-		<!-- ── Product title (above card) ── -->
-		<p id="ep-product-title"
-			class="hidden text-base text-center text-gray-700 font-medium mb-3 min-h-[1.5rem]"></p>
-
 		<!-- ── Product card ── -->
 		<div id="ep-card"
 			class="relative rounded-2xl border border-gray-200 shadow-sm overflow-hidden min-h-[550px]">
@@ -281,7 +213,62 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 			<div class="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60 pointer-events-none"></div>
 			<!-- inner fills the full card via absolute positioning so flex children have a definite height -->
 			<div id="ep-card-inner" class="absolute inset-0 flex flex-col overflow-hidden">
-				<div class="p-6 text-center text-sm text-gray-400">Loading&hellip;</div>
+
+				<!-- JS-rendered dynamic content -->
+				<div id="ep-card-content" class="flex-1 p-6 flex flex-col gap-3">
+					<div class="text-center text-sm text-white/50">Loading&hellip;</div>
+				</div>
+
+				<!-- Static controls: pill selects + button — never re-rendered by JS -->
+				<div id="ep-card-controls" class="px-4 pb-5 flex flex-col gap-3">
+
+					<!-- Dropdown row -->
+					<div class="flex gap-2">
+
+						<!-- Category -->
+						<div class="relative flex-1">
+							<select id="ep-category" aria-label="Category"
+								class="w-full appearance-none bg-black/50 backdrop-blur-sm border border-white/30
+								       text-white rounded-full px-4 py-2 text-sm cursor-pointer
+								       focus:outline-none focus:ring-1 focus:ring-white/50
+								       disabled:opacity-60 disabled:cursor-not-allowed">
+							</select>
+							<span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white/70 text-xs" aria-hidden="true">&#9660;</span>
+						</div>
+
+						<!-- Data / Duration -->
+						<div class="relative flex-1 min-w-0">
+							<select id="ep-data" aria-label="Data"
+								class="w-full appearance-none bg-black/50 backdrop-blur-sm border border-white/30
+								       text-white rounded-full px-4 py-2 text-sm cursor-pointer
+								       focus:outline-none focus:ring-1 focus:ring-white/50
+								       disabled:opacity-40 disabled:cursor-not-allowed"
+								disabled>
+							</select>
+							<span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white/70 text-xs" aria-hidden="true">&#9660;</span>
+						</div>
+
+						<!-- Qty -->
+						<div class="relative min-w-[4.5rem]">
+							<select id="ep-qty" aria-label="Quantity"
+								class="w-full appearance-none bg-black/50 backdrop-blur-sm border border-white/30
+								       text-white rounded-full px-4 py-2 text-sm cursor-pointer
+								       focus:outline-none focus:ring-1 focus:ring-white/50">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+							</select>
+							<span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white/70 text-xs" aria-hidden="true">&#9660;</span>
+						</div>
+
+					</div>
+
+					<!-- Button placeholder — filled by renderCard() -->
+					<div id="ep-card-btn"></div>
+
+				</div>
 			</div>
 		</div>
 
@@ -305,14 +292,12 @@ function ep_js() {
 	var selCat   = document.getElementById('ep-category');
 	var selData  = document.getElementById('ep-data');
 	var selQty   = document.getElementById('ep-qty');
-	var dLabel   = document.getElementById('ep-data-label');
 	var card     = document.getElementById('ep-card');
 	var cardBg   = document.getElementById('ep-card-bg');
-	var inner    = document.getElementById('ep-card-inner');
-	var priceEl  = document.getElementById('ep-price');
-	var titleEl  = document.getElementById('ep-product-title');
+	var inner    = document.getElementById('ep-card-content');
+	var btnEl    = document.getElementById('ep-card-btn');
 
-	if (!d || !module || !selCat || !selData || !card || !inner) return;
+	if (!d || !module || !selCat || !selData || !card || !inner || !btnEl) return;
 
 	var disableCat = module.dataset.disableCategory === 'true';
 
@@ -462,7 +447,7 @@ function ep_js() {
 		if (dataOpts.length) {
 			// ── Data mode ────────────────────────────────────────────────────
 			state.mode = 'data';
-			if (dLabel) dLabel.textContent = 'Data';
+			selData.setAttribute('aria-label', 'Data');
 
 			dataOpts.forEach(function (v) {
 				var o         = document.createElement('option');
@@ -482,7 +467,7 @@ function ep_js() {
 		} else if (durationOpts.length) {
 			// ── Duration mode — no display_size, use expiry_days ─────────────
 			state.mode = 'duration';
-			if (dLabel) dLabel.textContent = 'Duration';
+			selData.setAttribute('aria-label', 'Duration');
 
 			durationOpts.forEach(function (v) {
 				var o         = document.createElement('option');
@@ -502,7 +487,7 @@ function ep_js() {
 		} else {
 			// ── Nothing available ─────────────────────────────────────────────
 			state.mode = 'data';
-			if (dLabel) dLabel.textContent = 'Data';
+			selData.setAttribute('aria-label', 'Data');
 			var placeholder       = document.createElement('option');
 			placeholder.value     = '';
 			placeholder.textContent = 'N/A';
@@ -516,10 +501,9 @@ function ep_js() {
 		var p = findProduct();
 
 		if (!p) {
-			inner.innerHTML = '<div class="flex-1 p-6 flex items-center justify-center text-sm text-white/70">'
+			inner.innerHTML = '<div class="flex items-center justify-center h-full text-sm text-white/70">'
 				+ 'No product available for this selection.</div>';
-			if (titleEl) titleEl.textContent = '';
-			if (priceEl) priceEl.innerHTML   = '';
+			btnEl.innerHTML = '';
 			return;
 		}
 
@@ -569,12 +553,6 @@ function ep_js() {
 				+ '</div>';
 		}
 
-		// ── Populate elements outside the card ─────────────────────────────
-		if (titleEl) titleEl.textContent = '';
-		if (priceEl) priceEl.textContent = p.price > 0
-			? formatPrice(p.price * state.quantity)
-			: '';
-
 		// ── Badge data ──────────────────────────────────────────────────────
 		var policyBadges = {
 			'calls'      : ['Calls SMS', 'No data'],
@@ -589,11 +567,10 @@ function ep_js() {
 				+ ' text-xs lg:text-sm font-bold px-2.5 py-1 backdrop-blur-sm">' + label + '</span>';
 		}).join('');
 
+		// ── Content area (#ep-card-content) — pills, spacer, heading, subtitle
 		inner.innerHTML =
-			'<div class="flex-1 p-6 flex flex-col gap-3">'
-
 			// ── Top row: pills left, brand icon right ───────────────────────
-			+ '<div class="flex items-start justify-between gap-2">'
+			'<div class="flex items-start justify-between gap-2">'
 			+   '<div class="flex flex-wrap items-center gap-2">'
 			+     badgeHtml
 			+     (p.expiry_days ? '<span class="text-xs lg:text-sm font-bold text-white/80">' + p.expiry_days + ' days</span>' : '')
@@ -604,21 +581,19 @@ function ep_js() {
 				: '')
 			+ '</div>'
 
-			// ── Spacer — pushes heading + CTA to bottom ────────────────────
+			// ── Spacer — pushes heading + subtitle to bottom ───────────────
 			+ '<div class="flex-1"></div>'
 
-			// ── Category name — bottom third ────────────────────────────────
+			// ── Category name ──────────────────────────────────────────────
 			+ '<h2 class="!text-white !font-bold !text-5xl uppercase tracking-wide text-center drop-shadow">'
 			+   esc(state.category || p.categories[0] || '')
 			+ '</h2>'
 
-			// ── Product name ─────────────────────────────────────────────────
-			+ '<p class="text-white/90 text-sm text-center">' + esc(p.title) + '</p>'
+			// ── Product name ───────────────────────────────────────────────
+			+ '<p class="text-white/90 text-sm text-center">' + esc(p.title) + '</p>';
 
-			// ── CTA ─────────────────────────────────────────────────────────
-			+ '<div>' + btnHtml + '</div>'
-
-			+ '</div>';
+		// ── Button placeholder (#ep-card-btn) ──────────────────────────────
+		btnEl.innerHTML = btnHtml;
 
 	}
 

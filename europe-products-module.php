@@ -294,7 +294,7 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 		data-disable-category="<?php echo $disable_category ? 'true' : 'false'; ?>">
 
 		<!-- ── WhatsApp link ── -->
-		<p class="text-center text-xs" style="margin-top:calc(var(--spacing)*4)!important;margin-bottom:0!important;"><a href="https://wa.me/610404562005?text=Hey!%20I%20need%20some%20extra%20information%20about%20your%20products." target="_blank" rel="noopener noreferrer">Ask a question on WhatsApp</a></p>
+		<p class="flex justify-center" style="margin-top:calc(var(--spacing)*4)!important;margin-bottom:0!important;"><a href="https://wa.me/610404562005?text=Hey!%20I%20need%20some%20extra%20information%20about%20your%20products." target="_blank" rel="noopener noreferrer" class="flex items-center !text-[#4a9bed]" style="text-decoration:underline dotted;">Ask a question on WhatsApp <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></p>
 
 		<!-- ── Product card ── -->
 		<div id="ep-card" style="margin-top:10px;"

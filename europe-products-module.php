@@ -297,7 +297,7 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 		<p class="text-center text-xs" style="margin-top:calc(var(--spacing)*4)!important;margin-bottom:0!important;"><a href="https://wa.me/610404562005?text=Hey!%20I%20need%20some%20extra%20information%20about%20your%20products." target="_blank" rel="noopener noreferrer">Ask a question on WhatsApp</a></p>
 
 		<!-- ── Product card ── -->
-		<div id="ep-card" style="margin-top:30px;"
+		<div id="ep-card" style="margin-top:10px;"
 			class="relative rounded-2xl border border-gray-200 shadow-sm overflow-hidden min-h-[550px]">
 			<!-- background image layer — fades independently of the content -->
 			<div id="ep-card-bg"

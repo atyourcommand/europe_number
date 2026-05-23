@@ -444,15 +444,31 @@ function ep_js() {
 		}, 500);
 	}
 
-	/** Unique display_size values for a category, sorted numerically. */
+	/** Data options for a category. Returns [{value, label}] sorted numerically.
+	 *  Value is "display_size|product_id" so each product gets a unique slot.
+	 *  Label shows display_size alone when unique; adds a suffix when two products share the same size. */
 	function dataOptionsFor(catName) {
-		var seen = {};
+		var items = [];
 		d.products.forEach(function (p) {
 			if (catName && !p.categories.includes(catName)) return;
 			var ds = p.display_size && p.display_size.trim();
-			if (ds) seen[ds] = true;
+			if (!ds) return;
+			items.push({ value: ds + '|' + p.id, ds: ds, p: p });
 		});
-		return sortDataValues(Object.keys(seen));
+
+		// Count how many products share each display_size
+		var dsCounts = {};
+		items.forEach(function (item) { dsCounts[item.ds] = (dsCounts[item.ds] || 0) + 1; });
+
+		// Sort numerically by data size
+		items.sort(function (a, b) { return (parseFloat(a.ds) || 0) - (parseFloat(b.ds) || 0); });
+
+		return items.map(function (item) {
+			if (dsCounts[item.ds] === 1) return { value: item.value, label: item.ds };
+			var tp     = item.p.traffic_policy || '';
+			var suffix = (tp === 'calls_data' || tp === 'calls') ? ' + Number' : ' (Data)';
+			return { value: item.value, label: item.ds + suffix };
+		});
 	}
 
 	/** Unique expiry_days values for a category, sorted ascending. Used when display_size is absent. */
@@ -480,8 +496,18 @@ function ep_js() {
 			}) || inCat[0];
 		}
 
+		// state.dataValue is "display_size|product_id" — match by ID first, fall back to display_size
+		var parts    = state.dataValue.split('|');
+		var targetDs = parts[0];
+		var targetId = parts[1] ? parseInt(parts[1], 10) : null;
+
+		if (targetId) {
+			var byId = inCat.find(function (p) { return p.id === targetId; });
+			if (byId) return byId;
+		}
+
 		return inCat.find(function (p) {
-			return normData(p.display_size) === normData(state.dataValue);
+			return normData(p.display_size) === normData(targetDs);
 		}) || inCat[0];
 	}
 
@@ -510,18 +536,21 @@ function ep_js() {
 			state.mode = 'data';
 			selData.setAttribute('aria-label', 'Data');
 
-			dataOpts.forEach(function (v) {
+			// Match: exact compound key, or by display_size prefix (for initial defaultData)
+			var stateDs  = state.dataValue.split('|')[0];
+			var matched  = dataOpts.find(function (opt) {
+				return opt.value === state.dataValue || normData(opt.ds) === normData(stateDs);
+			});
+			state.dataValue = matched ? matched.value : dataOpts[dataOpts.length - 1].value;
+
+			dataOpts.forEach(function (opt) {
 				var o         = document.createElement('option');
-				o.value       = v;
-				o.textContent = v;
-				if (normData(v) === normData(state.dataValue)) o.selected = true;
+				o.value       = opt.value;
+				o.textContent = opt.label;
+				if (opt.value === state.dataValue) o.selected = true;
 				selData.appendChild(o);
 			});
 
-			var matched = dataOpts.find(function (v) {
-				return normData(v) === normData(state.dataValue);
-			});
-			state.dataValue  = matched || dataOpts[dataOpts.length - 1] || '';
 			selData.value    = state.dataValue;
 			selData.disabled = false;
 
@@ -684,8 +713,8 @@ function ep_js() {
 
 		if (typeof gtag === 'function') {
 			gtag('event', 'esim_data_select', {
-				esim_data          : state.dataValue,
-				esim_previous_data : prevData,
+				esim_data          : state.dataValue.split('|')[0],
+				esim_previous_data : prevData.split('|')[0],
 				esim_category      : state.category,
 			});
 		}

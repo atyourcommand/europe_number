@@ -466,7 +466,7 @@ function ep_js() {
 		return items.map(function (item) {
 			if (dsCounts[item.ds] === 1) return { value: item.value, label: item.ds };
 			var tp     = item.p.traffic_policy || '';
-			var suffix = (tp === 'calls_data' || tp === 'calls') ? ' + Number' : ' (Data)';
+			var suffix = (tp === 'calls_data' || tp === 'calls') ? '' : ' Data Only';
 			return { value: item.value, label: item.ds + suffix };
 		});
 	}

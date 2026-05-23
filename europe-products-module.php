@@ -704,12 +704,15 @@ function ep_js() {
 
 	selData.addEventListener('change', function () {
 		var prevData    = state.dataValue;
+		var prevOpt     = Array.prototype.find.call(selData.options, function (o) { return o.value === prevData; });
+		var prevLabel   = prevOpt ? prevOpt.text : prevData.split('|')[0];
 		state.dataValue = this.value;
+		var label       = this.options[this.selectedIndex].text;
 
 		if (typeof gtag === 'function') {
 			gtag('event', 'esim_data_select', {
-				esim_data          : state.dataValue.split('|')[0],
-				esim_previous_data : prevData.split('|')[0],
+				esim_data          : label,
+				esim_previous_data : prevLabel,
 				esim_category      : state.category,
 			});
 		}

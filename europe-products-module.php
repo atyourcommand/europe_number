@@ -456,17 +456,12 @@ function ep_js() {
 			items.push({ value: ds + '|' + p.id, ds: ds, p: p });
 		});
 
-		// Count how many products share each display_size
-		var dsCounts = {};
-		items.forEach(function (item) { dsCounts[item.ds] = (dsCounts[item.ds] || 0) + 1; });
-
 		// Sort numerically by data size
 		items.sort(function (a, b) { return (parseFloat(a.ds) || 0) - (parseFloat(b.ds) || 0); });
 
 		return items.map(function (item) {
-			if (dsCounts[item.ds] === 1) return { value: item.value, label: item.ds };
 			var tp     = item.p.traffic_policy || '';
-			var suffix = (tp === 'calls_data' || tp === 'calls') ? '' : ' Data Only';
+			var suffix = (tp === 'data') ? ' Data Only' : '';
 			return { value: item.value, label: item.ds + suffix };
 		});
 	}

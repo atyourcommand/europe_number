@@ -268,7 +268,7 @@ function en_quick_links_module( $category_slug = null ) {
 	</style>
 
 	<div class="site-container">
-	<div class="lg:px-8 py-6 md:py-12">
+	<div class="lg:px-8 md:py-12">
 	<div class="banner mx-auto lg:max-w-4xl overflow-hidden">
 
 		<!-- TOP: Category quick links -->

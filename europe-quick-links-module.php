@@ -312,14 +312,11 @@ function en_quick_links_module( $category_slug = null ) {
 				$validity       = $expiry_days ? $expiry_days . ' Days' : '';
 				$price          = wc_price( $product->get_price() );
 
-				// Build display title — append "Data Only" when no calls, matching dropdown logic
+				// Build display title
 				if ( $display_size && $display_units ) {
 					$display_title = $display_size . $display_units;
 				} else {
 					$display_title = get_the_title();
-				}
-				if ( $traffic_policy === 'data' ) {
-					$display_title .= ' Data Only';
 				}
 
 				$btn_label  = en_ql_traffic_label( $traffic_policy );

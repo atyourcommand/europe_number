@@ -192,6 +192,19 @@ function en_quick_links_module( $category_slug = null ) {
 		transform: translateY(-2px);
 		text-decoration: none;
 	}
+	/* Data-only variant */
+	.en-ql-btn--data {
+		background-color: #FFA103;
+		color: #000000;
+	}
+	.en-ql-btn--data:hover,
+	.en-ql-btn--data:focus {
+		background-color: #e08f00;
+		color: #000000;
+	}
+	.en-ql-btn--data .en-ql-label {
+		color: rgba(0, 0, 0, 0.6);
+	}
 	/* Static image button */
 	.en-ql-btn--image {
 		padding: 0;
@@ -309,9 +322,10 @@ function en_quick_links_module( $category_slug = null ) {
 					$display_title .= ' Data Only';
 				}
 
-				$btn_label = en_ql_traffic_label( $traffic_policy );
+				$btn_label  = en_ql_traffic_label( $traffic_policy );
+				$btn_class  = $traffic_policy === 'data' ? 'en-ql-btn en-ql-btn--data' : 'en-ql-btn';
 				?>
-				<a href="<?php echo esc_url( $link ); ?>" class="en-ql-btn">
+				<a href="<?php echo esc_url( $link ); ?>" class="<?php echo $btn_class; ?>">
 					<span class="en-ql-title"><?php echo esc_html( $display_title ); ?></span>
 					<span class="en-ql-price"><?php echo $price; ?></span>
 					<span class="en-ql-label"><?php echo esc_html( $btn_label ); ?></span>

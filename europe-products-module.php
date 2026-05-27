@@ -146,6 +146,7 @@ function ep_build_payload() {
 			'id'             => $id,
 			'title'          => $product->get_name(),
 			'sku'            => $product->get_sku(),
+			'permalink'      => get_permalink( $id ),
 			'add_to_cart_url' => $product->add_to_cart_url(),
 			'price'          => (float) $product->get_price(),
 			'categories'     => $cats,
@@ -676,7 +677,9 @@ function ep_js() {
 			+ '</h2>'
 
 			// ── Product name ───────────────────────────────────────────────
-			+ '<p class="text-white/90 text-sm text-center">' + esc(p.title) + '</p>';
+			+ '<p class="text-white/90 text-sm text-center">'
+			+ (p.permalink ? '<a href="' + esc(p.permalink) + '" class="text-white/90 hover:text-white underline underline-offset-2">' + esc(p.title) + ' &rarr;</a>' : esc(p.title))
+			+ '</p>';
 
 		// ── Button placeholder (#ep-card-btn) ──────────────────────────────
 		btnEl.innerHTML = btnHtml;

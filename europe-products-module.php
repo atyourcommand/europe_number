@@ -462,7 +462,7 @@ function ep_js() {
 		return items.map(function (item) {
 			var tp     = item.p.traffic_policy || '';
 			var suffix = (tp === 'data') ? ' Data Only' : '';
-			return { value: item.value, label: item.ds + suffix };
+			return { value: item.value, label: item.ds + suffix, ds: item.ds };
 		});
 	}
 

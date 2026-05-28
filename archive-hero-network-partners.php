@@ -213,13 +213,13 @@
                      &nbsp;<img src="/wp-content/uploads/2026/05/icon-5g.png" width="19" height="" alt="5g" class="self-center">
                   </span>
                </div>
-               <div class="flex max-lg:justify-center lg:justify-end gap-x-2">
+               <div class="flex max-lg:justify-center lg:justify-end gap-x-2 mt-3">
                   <span class="mt-0.5 size-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-800/30 dark:text-blue-500">
                      <svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path>
                      </svg>
                   </span>
-                  <div class="grow">
+                  <div>
                      <span class="dark:text-white">
                         <span class="font-bold"><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_countries" role="button" aria-haspopup="dialog" aria-controls="modal_window_countries" aria-label="View list of countries for calls and SMS" style="text-decoration: underline dotted;">Network <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></span>
                      </span>

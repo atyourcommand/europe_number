@@ -4,7 +4,6 @@
    margin-top: 15px;
    padding-bottom: 30px;
    position: relative;
-   /* Fade edges for a polished look */
    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
    mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
 }
@@ -23,18 +22,11 @@
 	<div class="lg:px-8 md:py-12">
 	<div style="background-color:#4A9BED !important" class="banner mx-auto lg:max-w-4xl overflow-hidden">
 
-
 		<!-- TOP: Category quick links -->
 		<div class="bg-white flex items-center justify-center gap-6 px-6 py-3 border-b border-[#e2e8f0]">
-			<a href="https://europenumber.com/product-category/esim-france/"
-			   class="flex font-bold uppercase !text-[#4a9bed]"
-			   style="text-decoration: underline dotted;">France &rarr;</a>
-			<a href="https://europenumber.com/product-category/esim-europe/"
-			   class="flex font-bold uppercase !text-[#4a9bed]"
-			   style="text-decoration: underline dotted;">Europe &rarr;</a>
-			<a href="https://europenumber.com/product-category/esim-united-kingdom/"
-			   class="flex font-bold uppercase !text-[#4a9bed]"
-			   style="text-decoration: underline dotted;">The UK &rarr;</a>
+			<a href="https://europenumber.com/product-category/esim-france/" class="flex font-bold uppercase !text-[#4a9bed]" style="text-decoration: underline dotted;">France &rarr;</a>
+			<a href="https://europenumber.com/product-category/esim-europe/" class="flex font-bold uppercase !text-[#4a9bed]" style="text-decoration: underline dotted;">Europe &rarr;</a>
+			<a href="https://europenumber.com/product-category/esim-united-kingdom/" class="flex font-bold uppercase !text-[#4a9bed]" style="text-decoration: underline dotted;">The UK &rarr;</a>
 		</div>
 
 		<div class="mx-auto">
@@ -211,10 +203,30 @@
 		<!-- Selling points / trust bar -->
 		<div class="flex flex-wrap gap-2 px-6 py-3.5 bg-[#EDF2F7] border-t border-[#e2e8f0]">
 		<ul class="items-center !mx-auto uppercase grid max-md:grid-cols-2 grid-cols-4 gap-[12px] w-fit max-w-4xl" style="padding:0; margin-bottom:0; justify-content:center;font-size:90%; font-family: var(--global-heading-font-family)">
-		  <li class="flex gap-x-2"><span class="font-bold"><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_countries" role="button" style="text-decoration: underline dotted;">Network</a></span></li>
-		  <li class="flex gap-x-2"><span class="font-bold"><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_poi_a" role="button" style="text-decoration: underline dotted;">+33 number</a></span></li>
-		  <li class="flex gap-x-2"><span class="font-bold"><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_poi_b" role="button" style="text-decoration: underline dotted;">Travel ready</a></span></li>
-		  <li class="flex gap-x-2"><span class="font-bold"><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_poi_c" role="button" style="text-decoration: underline dotted;">Comparison</a></span></li>
+		  <li class="flex gap-x-2">
+			<span class="mt-0.5 size-5 flex justify-center items-center text-blue-600 dark:text-blue-500">
+			  <svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path></svg>
+			</span>
+			<div class="grow"><span class="dark:text-white"><span class="font-bold"><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_countries" role="button" aria-haspopup="dialog" aria-controls="modal_window_countries" aria-label="View list of countries for calls and SMS" style="text-decoration: underline dotted;">Network <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></span></span></div>
+		  </li>
+		  <li class="flex gap-x-2">
+			<span class="mt-0.5 size-5 flex justify-center items-center text-blue-600 dark:text-blue-500">
+			  <svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path></svg>
+			</span>
+			<div class="grow"><span class="dark:text-white"><span class="font-bold"><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_poi_a" role="button" aria-haspopup="dialog" aria-controls="modal_window_poi_a" aria-label="View more about your France Phone Number" style="text-decoration: underline dotted;">+33 number <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></span></span></div>
+		  </li>
+		  <li class="flex gap-x-2">
+			<span class="mt-0.5 size-5 flex justify-center items-center text-blue-600 dark:text-blue-500">
+			  <svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path></svg>
+			</span>
+			<div class="grow"><span class="dark:text-white"><span class="font-bold"><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_poi_b" role="button" aria-haspopup="dialog" aria-controls="modal_window_poi_b" aria-label="View more Travel ready" style="text-decoration: underline dotted;">Travel ready <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></span></span></div>
+		  </li>
+		  <li class="flex gap-x-2">
+			<span class="mt-0.5 size-5 flex justify-center items-center text-blue-600 dark:text-blue-500">
+			  <svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path></svg>
+			</span>
+			<div class="grow"><span class="dark:text-white"><span class="font-bold"><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_poi_c" role="button" aria-haspopup="dialog" aria-controls="modal_window_poi_c" aria-label="View more about Data Users eSIM Comparison" style="text-decoration: underline dotted;">Comparison <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></span></span></div>
+		  </li>
 		</ul>
 		</div>
 

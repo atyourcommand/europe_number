@@ -678,7 +678,7 @@ function ep_js() {
 
 			// ── Product name ───────────────────────────────────────────────
 			+ '<p class="text-white/90 text-sm text-center">'
-			+ (p.permalink ? '<a href="' + esc(p.permalink) + '" class="text-white/90 hover:text-white underline underline-offset-2">' + esc(p.title) + ' &rarr;</a>' : esc(p.title))
+			+ (p.permalink ? '<a href="' + esc(p.permalink) + '" class="underline underline-offset-2" style="color:rgba(255,255,255,0.9)!important;" onmouseover="this.style.color=\'#ffffff\'" onmouseout="this.style.color=\'rgba(255,255,255,0.9)\'">' + esc(p.title) + ' &rarr;</a>' : esc(p.title))
 			+ '</p>';
 
 		// ── Button placeholder (#ep-card-btn) ──────────────────────────────

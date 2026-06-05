@@ -445,23 +445,33 @@ function ep_js() {
 		}, 500);
 	}
 
-	/** Data options for a category. Returns [{value, label}] sorted numerically.
-	 *  Value is "display_size|product_id" so each product gets a unique slot.
-	 *  Label shows display_size alone when unique; adds a suffix when two products share the same size. */
+	/** Data options for a category. Returns [{value, label, ds}] sorted numerically.
+	 *  calls_data / data products: value = "display_size|product_id", sorted by GB.
+	 *  calls (number-only) products: value = "days:N|product_id", appended after data products. */
 	function dataOptionsFor(catName) {
-		var items = [];
+		var dataItems = [];
+		var callsItems = [];
 		d.products.forEach(function (p) {
 			if (catName && !p.categories.includes(catName)) return;
-			var ds = p.display_size && p.display_size.trim();
-			if (!ds) return;
-			items.push({ value: ds + '|' + p.id, ds: ds, p: p });
+			var tp = p.traffic_policy || '';
+			if (tp === 'calls') {
+				if (!p.expiry_days) return;
+				callsItems.push({ value: 'days:' + p.expiry_days + '|' + p.id, ds: null, days: p.expiry_days, p: p });
+			} else {
+				var ds = p.display_size && p.display_size.trim();
+				if (!ds) return;
+				dataItems.push({ value: ds + '|' + p.id, ds: ds, days: null, p: p });
+			}
 		});
 
-		// Sort numerically by data size
-		items.sort(function (a, b) { return (parseFloat(a.ds) || 0) - (parseFloat(b.ds) || 0); });
+		dataItems.sort(function (a, b) { return (parseFloat(a.ds) || 0) - (parseFloat(b.ds) || 0); });
+		callsItems.sort(function (a, b) { return (a.days || 0) - (b.days || 0); });
 
-		return items.map(function (item) {
-			var tp     = item.p.traffic_policy || '';
+		return dataItems.concat(callsItems).map(function (item) {
+			var tp = item.p.traffic_policy || '';
+			if (tp === 'calls') {
+				return { value: item.value, label: item.days + ' Days', ds: null };
+			}
 			var suffix = (tp === 'data') ? ' Data Only' : '';
 			return { value: item.value, label: item.ds + suffix, ds: item.ds };
 		});
@@ -535,7 +545,7 @@ function ep_js() {
 			// Match: exact compound key, or by display_size prefix (for initial defaultData)
 			var stateDs  = state.dataValue.split('|')[0];
 			var matched  = dataOpts.find(function (opt) {
-				return opt.value === state.dataValue || normData(opt.ds) === normData(stateDs);
+				return opt.value === state.dataValue || (opt.ds && normData(opt.ds) === normData(stateDs));
 			});
 			state.dataValue = matched ? matched.value : dataOpts[dataOpts.length - 1].value;
 

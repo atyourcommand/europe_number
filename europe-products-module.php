@@ -470,7 +470,7 @@ function ep_js() {
 		return dataItems.concat(callsItems).map(function (item) {
 			var tp = item.p.traffic_policy || '';
 			if (tp === 'calls') {
-				return { value: item.value, label: item.days + ' Days', ds: null };
+				return { value: item.value, label: 'Number Calls [' + item.days + '] days', ds: null };
 			}
 			var suffix = (tp === 'data') ? ' Data Only' : '';
 			return { value: item.value, label: item.ds + suffix, ds: item.ds };
@@ -568,7 +568,7 @@ function ep_js() {
 			durationOpts.forEach(function (v) {
 				var o         = document.createElement('option');
 				o.value       = v;
-				o.textContent = v + ' days';
+				o.textContent = 'Number Calls [' + v + '] days';
 				if (parseInt(state.dataValue, 10) === v) o.selected = true;
 				selData.appendChild(o);
 			});

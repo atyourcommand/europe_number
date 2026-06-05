@@ -542,10 +542,12 @@ function ep_js() {
 			state.mode = 'data';
 			selData.setAttribute('aria-label', 'Data');
 
-			// Match: exact compound key, or by display_size prefix (for initial defaultData)
+			// Match: exact compound key, display_size prefix, or days: prefix (for calls products)
 			var stateDs  = state.dataValue.split('|')[0];
 			var matched  = dataOpts.find(function (opt) {
-				return opt.value === state.dataValue || (opt.ds && normData(opt.ds) === normData(stateDs));
+				return opt.value === state.dataValue
+					|| (opt.ds && normData(opt.ds) === normData(stateDs))
+					|| opt.value.split('|')[0] === stateDs;
 			});
 			state.dataValue = matched ? matched.value : dataOpts[dataOpts.length - 1].value;
 

@@ -17,28 +17,22 @@
 .module-country-icons .scroll-inner a {
    -webkit-user-drag: none;
 }
-.module-product-gallery .scroll-wrapper {
-   overflow: hidden;
-   padding: 10px 0 20px;
+.module-product-gallery {
    position: relative;
-   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
-   mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
+   padding: 10px 0 0;
+}
+.module-product-gallery .slider-track {
+   overflow: hidden;
 }
 .module-product-gallery .scroll-inner {
    display: flex;
    flex-wrap: nowrap;
    gap: 12px;
-   will-change: transform;
-   cursor: grab;
-}
-.module-product-gallery .scroll-inner a {
-   -webkit-user-drag: none;
+   transition: transform 0.35s ease;
 }
 .module-product-gallery .product-card {
    flex-shrink: 0;
    width: 125px;
-   /* background: #fff; */
-   /* border-radius: 12px; */
    overflow: hidden;
    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
    text-align: center;
@@ -51,9 +45,53 @@
    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
 }
 .module-product-gallery .product-card img {
-   width: auto;
-   height: 140px;
+   width: 100%;
+   height: auto;
    display: block;
+}
+.module-product-gallery .slider-controls {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 10px;
+   padding: 10px 0 8px;
+}
+.module-product-gallery .slider-arrow {
+   background: rgba(255,255,255,0.25);
+   border: none;
+   border-radius: 50%;
+   width: 28px;
+   height: 28px;
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   color: #fff;
+   font-size: 14px;
+   transition: background 0.2s;
+   flex-shrink: 0;
+}
+.module-product-gallery .slider-arrow:hover {
+   background: rgba(255,255,255,0.45);
+}
+.module-product-gallery .slider-dots {
+   display: flex;
+   gap: 6px;
+   align-items: center;
+}
+.module-product-gallery .slider-dot {
+   width: 7px;
+   height: 7px;
+   border-radius: 50%;
+   background: rgba(255,255,255,0.4);
+   border: none;
+   cursor: pointer;
+   padding: 0;
+   transition: background 0.2s, transform 0.2s;
+}
+.module-product-gallery .slider-dot.active {
+   background: #fff;
+   transform: scale(1.25);
 }
 </style>
 <div class="site-container">
@@ -260,7 +298,7 @@
 						<p class="mt-2 max-w-lg max-lg:text-center">Trip cancelled or things did not work out? If your eSim was not activated, we will gladly refund the listed price for up to 3 months from purchase. That is the Traveller eSIM promise.</p>
 					</div>
 					<div class="module-product-gallery">
-						<div class="scroll-wrapper">
+						<div class="slider-track">
 							<div class="scroll-inner">
 								<a class="product-card" href="https://europenumber.com/product-category/esim-france/"><img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-15.png" alt="eSIM 15GB" width="800" height="1172"></a>
 								<a class="product-card" href="https://europenumber.com/product-category/esim-france/"><img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-20.png" alt="eSIM 20GB" width="800" height="1172"></a>
@@ -274,6 +312,11 @@
 								<a class="product-card" href="https://europenumber.com/product-category/esim-france/"><img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-data-120.png" alt="eSIM 120GB Data &amp; Number" width="800" height="1172"></a>
 								<a class="product-card" href="https://europenumber.com/product-category/esim-france/"><img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-number-fr.png" alt="eSIM France Number" width="800" height="1172"></a>
 							</div>
+						</div>
+						<div class="slider-controls">
+							<button class="slider-arrow slider-prev" aria-label="Previous products">&#8592;</button>
+							<div class="slider-dots"></div>
+							<button class="slider-arrow slider-next" aria-label="Next products">&#8594;</button>
 						</div>
 					</div>
 				</div>
@@ -391,7 +434,55 @@
    }
 
    initScroller('.module-country-icons .scroll-wrapper', '.module-country-icons .scroll-inner', 0.5);
-   initScroller('.module-product-gallery .scroll-wrapper', '.module-product-gallery .scroll-inner', 0.4);
+   // Product gallery — manual slider with arrows and dots
+   (function () {
+      var gallery = document.querySelector('.module-product-gallery');
+      if (!gallery) return;
+      var inner = gallery.querySelector('.scroll-inner');
+      var dotsEl = gallery.querySelector('.slider-dots');
+      var prevBtn = gallery.querySelector('.slider-prev');
+      var nextBtn = gallery.querySelector('.slider-next');
+      if (!inner || !dotsEl || !prevBtn || !nextBtn) return;
+
+      var cards = Array.from(inner.querySelectorAll('.product-card'));
+      var perPage = 3;
+      var total = cards.length;
+      var pages = Math.ceil(total / perPage);
+      var current = 0;
+
+      // Build dots
+      for (var i = 0; i < pages; i++) {
+         var dot = document.createElement('button');
+         dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
+         dot.setAttribute('aria-label', 'Go to page ' + (i + 1));
+         dot.setAttribute('data-page', i);
+         dotsEl.appendChild(dot);
+      }
+
+      function goTo(page) {
+         current = Math.max(0, Math.min(page, pages - 1));
+         var cardW = cards[0].offsetWidth + 12; // width + gap
+         inner.style.transform = 'translateX(-' + (current * perPage * cardW) + 'px)';
+         dotsEl.querySelectorAll('.slider-dot').forEach(function (d, idx) {
+            d.classList.toggle('active', idx === current);
+         });
+      }
+
+      prevBtn.addEventListener('click', function () { goTo(current - 1); });
+      nextBtn.addEventListener('click', function () { goTo(current + 1); });
+      dotsEl.addEventListener('click', function (e) {
+         var dot = e.target.closest('.slider-dot');
+         if (dot) goTo(parseInt(dot.getAttribute('data-page')));
+      });
+
+      // Touch swipe
+      var tx = 0;
+      inner.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; }, { passive: true });
+      inner.addEventListener('touchend', function (e) {
+         var dx = tx - e.changedTouches[0].clientX;
+         if (Math.abs(dx) > 40) goTo(dx > 0 ? current + 1 : current - 1);
+      });
+   })();
 })();
 </script>
 <script>

@@ -17,7 +17,6 @@
 .module-country-icons .scroll-inner a {
    -webkit-user-drag: none;
 }
-<style>
 .module-product-gallery .scroll-wrapper {
    overflow: hidden;
    padding: 10px 0 20px;
@@ -28,7 +27,7 @@
 .module-product-gallery .scroll-inner {
    display: flex;
    flex-wrap: nowrap;
-   gap: 16px;
+   gap: 12px;
    will-change: transform;
    cursor: grab;
 }
@@ -37,23 +36,18 @@
 }
 .module-product-gallery .product-card {
    flex-shrink: 0;
-   width: 160px;
-   background: #fff;
-   border-radius: 12px;
+   border-radius: 8px;
    overflow: hidden;
-   box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-   text-align: center;
-   text-decoration: none;
    display: block;
    transition: transform 0.2s, box-shadow 0.2s;
 }
 .module-product-gallery .product-card:hover {
-   transform: translateY(-3px);
+   transform: translateY(-2px);
    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
 }
 .module-product-gallery .product-card img {
-   width: 100%;
-   height: auto;
+   width: auto;
+   height: 140px;
    display: block;
 }
 </style>
@@ -238,86 +232,51 @@
    </div>
 </div>
 		</div>
-        <div class="grid gap-4 md:grid-cols-2 md:grid-rows-1">
 
+		<div class="grid gap-4 md:grid-cols-2 md:grid-rows-1">
 
-			      <div class="relative max-md:row-start-2 md:col-start-1">
+			<div class="relative max-md:row-start-2 md:col-start-1">
+				<div class="relative flex h-full flex-col overflow-hidden">
+					<div class="px-8 pt-8 pb-3 sm:px-10 sm:pt-10 sm:pb-0">
+						<p class="text-center text-sky-300 font-mono text-[0.8125rem]/6 font-small tracking-widest text-pretty uppercase !mb-0">Our easiest eSIM installation</p>
+					</div>
+					<div class="iphone-mockup @container relative min-h-[25rem] w-full grow max-lg:mx-auto max-lg:max-w-sm">
+						<div class="absolute inset-x-10 top-10 bottom-0 overflow-hidden rounded-t-[12cqw] border-x-[3cqw] border-t-[3cqw] border-gray-700 bg-gray-900 shadow-2xl">
+							<img width="500" height="643" decoding="async" class="size-full object-cover object-top" src="https://europenumber.com/wp-content/uploads/2026/06/scan-your-qr.webp" alt="2 passengers approaching their aircraft ready for travel and chatting to each other">
+						</div>
+					</div>
+				</div>
+			</div>
 
-        <div class="relative flex h-full flex-col overflow-hidden">
-          <div class="px-8 pt-8 pb-3 sm:px-10 sm:pt-10 sm:pb-0">
+			<div class="relative max-md:row-start-1 md:col-start-2">
+				<div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)]">
+					<div class="px-8 pt-8 sm:px-10 sm:pt-10">
+						<h2 class="!text-lg !mb-3 max-lg:text-center">Peace of mind</h2>
+						<p class="mt-2 max-w-lg max-lg:text-center">Trip cancelled or things did not work out? If your eSim was not activated, we will gladly refund the listed price for up to 3 months from purchase. That is the Traveller eSIM promise.</p>
+					</div>
+					<!-- Product image gallery -->
+					<div class="module-product-gallery">
+						<div class="scroll-wrapper">
+							<div class="scroll-inner">
+								<a class="product-card" href="https://europenumber.com/product-category/esim-france/"><img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-15.png" alt="eSIM 15GB" width="800" height="1172"></a>
+								<a class="product-card" href="https://europenumber.com/product-category/esim-france/"><img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-20.png" alt="eSIM 20GB" width="800" height="1172"></a>
+								<a class="product-card" href="https://europenumber.com/product-category/esim-france/"><img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-30.png" alt="eSIM 30GB" width="800" height="1172"></a>
+								<a class="product-card" href="https://europenumber.com/product-category/esim-france/"><img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-60.png" alt="eSIM 60GB" width="800" height="1172"></a>
+								<a class="product-card" href="https://europenumber.com/product-category/esim-france/"><img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-120.png" alt="eSIM 120GB" width="800" height="1172"></a>
+								<a class="product-card" href="https://europenumber.com/product-category/esim-france/"><img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-data-15.png" alt="eSIM 15GB Data" width="800" height="1172"></a>
+								<a class="product-card" href="https://europenumber.com/product-category/esim-france/"><img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-data-20.png" alt="eSIM 20GB Data &amp; Number" width="800" height="1172"></a>
+								<a class="product-card" href="https://europenumber.com/product-category/esim-france/"><img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-data-30.png" alt="eSIM 30GB Data &amp; Number" width="800" height="1172"></a>
+								<a class="product-card" href="https://europenumber.com/product-category/esim-france/"><img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-data-60.png" alt="eSIM 60GB Data &amp; Number" width="800" height="1172"></a>
+								<a class="product-card" href="https://europenumber.com/product-category/esim-france/"><img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-data-120.png" alt="eSIM 120GB Data &amp; Number" width="800" height="1172"></a>
+								<a class="product-card" href="https://europenumber.com/product-category/esim-france/"><img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-number-fr.png" alt="eSIM France Number" width="800" height="1172"></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-<p class="text-center text-sky-300 font-mono text-[0.8125rem]/6 font-small tracking-widest text-pretty uppercase !mb-0">Our easiest eSIM installation</p>
-          </div>
-          <div class="iphone-mockup @container relative min-h-[25rem] w-full grow max-lg:mx-auto max-lg:max-w-sm">
-            <div class="absolute inset-x-10 top-10 bottom-0 overflow-hidden rounded-t-[12cqw] border-x-[3cqw] border-t-[3cqw] border-gray-700 bg-gray-900 shadow-2xl">
-              <img width="500" height="643" decoding="async" class="size-full object-cover object-top" src="https://europenumber.com/wp-content/uploads/2026/06/scan-your-qr.webp" alt="2 passengers approaching their aircraft ready for travel and chatting to each other">
-            </div>
-          </div>
-        </div>
-      </div>
-			      <div class="relative max-md:row-start-1 md:col-start-2">
-        <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)]">
-          <div class="px-8 pt-8 sm:px-10 sm:pt-10">
-            <h2 class="!text-lg !mb-3 max-lg:text-center">Peace of mind</h2>
-            <p class="mt-2 max-w-lg max-lg:text-center">Trip cancelled or things did not work out? If your eSim was not activated, we will gladly refund the listed price for up to 3 months from purchase. That is the Traveller eSIM promise.</p>
-          </div>
-          <!-- Product image gallery scroller -->
-		<div class="module-product-gallery">
-		   <div class="scroll-wrapper">
-		      <div class="scroll-inner">
-
-		         <a class="product-card" href="https://europenumber.com/product-category/esim-france/">
-		            <img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-15.png" alt="eSIM 15GB" width="800" height="1172">
-		         </a>
-
-		         <a class="product-card" href="https://europenumber.com/product-category/esim-france/">
-		            <img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-20.png" alt="eSIM 20GB" width="800" height="1172">
-		         </a>
-
-		         <a class="product-card" href="https://europenumber.com/product-category/esim-france/">
-		            <img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-30.png" alt="eSIM 30GB" width="800" height="1172">
-		         </a>
-
-		         <a class="product-card" href="https://europenumber.com/product-category/esim-france/">
-		            <img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-60.png" alt="eSIM 60GB" width="800" height="1172">
-		         </a>
-
-		         <a class="product-card" href="https://europenumber.com/product-category/esim-france/">
-		            <img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-120.png" alt="eSIM 120GB" width="800" height="1172">
-		         </a>
-
-		         <a class="product-card" href="https://europenumber.com/product-category/esim-france/">
-		            <img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-data-15.png" alt="eSIM 15GB Data product" width="800" height="1172">
-		         </a>
-
-		         <a class="product-card" href="https://europenumber.com/product-category/esim-france/">
-		            <img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-data-20.png" alt="eSIM 20GB Data &amp; Number product" width="800" height="1172">
-		         </a>
-
-		         <a class="product-card" href="https://europenumber.com/product-category/esim-france/">
-		            <img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-data-30.png" alt="eSIM 30GB Data &amp; Number product" width="800" height="1172">
-		         </a>
-
-		         <a class="product-card" href="https://europenumber.com/product-category/esim-france/">
-		            <img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-data-60.png" alt="eSIM 60GB Data &amp; Number product" width="800" height="1172">
-		         </a>
-
-		         <a class="product-card" href="https://europenumber.com/product-category/esim-france/">
-		            <img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-data-120.png" alt="eSIM 120GB Data &amp; Number product" width="800" height="1172">
-		         </a>
-
-		         <a class="product-card" href="https://europenumber.com/product-category/esim-france/">
-		            <img decoding="async" loading="lazy" src="https://europenumber.com/wp-content/uploads/2025/11/esim-number-fr.png" alt="eSIM France Number" width="800" height="1172">
-		         </a>
-
-		      </div>
-		   </div>
 		</div>
-          </div>
-        </div>
-      </div>
 
-    </div>
 		<!-- Selling points / trust bar -->
 		<div class="flex flex-wrap gap-2 px-2 md:px-6 py-3.5 bg-[#EDF2F7] border-t border-[#e2e8f0]">
 		<ul class="items-center !mx-auto uppercase grid max-md:grid-cols-2 grid-cols-4 gap-[12px] w-fit max-w-4xl" style="padding:0; margin-bottom:0; justify-content:center;font-size:90%; font-family: var(--global-heading-font-family)">
@@ -350,61 +309,50 @@
 
 	</div>
 	</div>
-	</div>
+</div>
+<script>
+(function () {
+   var mockup = document.querySelector('.iphone-mockup');
+   if (!mockup) return;
+   var minH = 25, maxH = 45, current = minH, step = 0.25;
+   var lastY = window.scrollY, ticking = false;
+   function update() {
+      var y = window.scrollY, delta = y - lastY; lastY = y;
+      if (delta > 0) current = Math.min(current + step, maxH);
+      else if (delta < 0) current = Math.max(current - step, minH);
+      mockup.style.minHeight = current + 'rem';
+      ticking = false;
+   }
+   window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+   }, { passive: true });
+})();
+</script>
 <script>
 (function () {
    function initScroller(wrapperSel, innerSel, speed) {
       var wrapper = document.querySelector(wrapperSel);
       var inner   = document.querySelector(innerSel);
       if (!wrapper || !inner) return;
-
       Array.from(inner.children).forEach(function (item) {
          var clone = item.cloneNode(true);
          clone.setAttribute('aria-hidden', 'true');
          inner.appendChild(clone);
       });
-
-      var pos    = 0;
-      var paused = false;
-      var loopAt = 0;
-
-      function getLoopAt() {
-         if (!loopAt) loopAt = inner.scrollWidth / 2;
-         return loopAt;
-      }
-
-      function wrapPos(p) {
-         var l = getLoopAt();
-         return ((p % l) + l) % l;
-      }
-
+      var pos = 0, paused = false, loopAt = 0;
+      function getLoopAt() { if (!loopAt) loopAt = inner.scrollWidth / 2; return loopAt; }
+      function wrapPos(p) { var l = getLoopAt(); return ((p % l) + l) % l; }
       function step() {
-         if (!paused) {
-            pos += speed;
-            if (pos >= getLoopAt()) pos = 0;
-            inner.style.transform = 'translateX(-' + pos + 'px)';
-         }
+         if (!paused) { pos += speed; if (pos >= getLoopAt()) pos = 0; inner.style.transform = 'translateX(-' + pos + 'px)'; }
          requestAnimationFrame(step);
       }
-
+      var dragging = false, dragStartX = 0, dragStartPos = 0, didDrag = false;
       wrapper.addEventListener('mouseenter', function () { if (!dragging) paused = true; });
       wrapper.addEventListener('mouseleave', function () { if (!dragging) paused = false; });
-
-      var dragging     = false;
-      var dragStartX   = 0;
-      var dragStartPos = 0;
-      var didDrag      = false;
-
       inner.addEventListener('mousedown', function (e) {
-         dragging           = true;
-         paused             = true;
-         dragStartX         = e.clientX;
-         dragStartPos       = pos;
-         didDrag            = false;
-         inner.style.cursor = 'grabbing';
-         e.preventDefault();
+         dragging = true; paused = true; dragStartX = e.clientX; dragStartPos = pos; didDrag = false;
+         inner.style.cursor = 'grabbing'; e.preventDefault();
       });
-
       document.addEventListener('mousemove', function (e) {
          if (!dragging) return;
          var delta = dragStartX - e.clientX;
@@ -412,87 +360,34 @@
          pos = wrapPos(dragStartPos + delta);
          inner.style.transform = 'translateX(-' + pos + 'px)';
       });
-
       document.addEventListener('mouseup', function () {
          if (!dragging) return;
-         dragging           = false;
-         inner.style.cursor = '';
+         dragging = false; inner.style.cursor = '';
          setTimeout(function () { paused = false; }, 1200);
       });
-
-      var touchStartX   = 0;
-      var touchStartPos = 0;
-      var touchHoriz    = null;
-
+      var touchStartX = 0, touchStartY = 0, touchStartPos = 0, touchHoriz = null;
       wrapper.addEventListener('touchstart', function (e) {
-         touchStartX   = e.touches[0].clientX;
-         touchStartPos = pos;
-         touchHoriz    = null;
-         paused        = true;
+         touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY;
+         touchStartPos = pos; touchHoriz = null; paused = true;
       }, { passive: true });
-
       wrapper.addEventListener('touchmove', function (e) {
          var dx = e.touches[0].clientX - touchStartX;
-         var dy = e.touches[0].clientY - e.touches[0].clientY;
-         if (touchHoriz === null) touchHoriz = true;
+         var dy = e.touches[0].clientY - touchStartY;
+         if (touchHoriz === null) touchHoriz = Math.abs(dx) > Math.abs(dy);
          if (!touchHoriz) return;
          e.preventDefault();
          pos = wrapPos(touchStartPos - dx);
          inner.style.transform = 'translateX(-' + pos + 'px)';
       }, { passive: false });
-
-      wrapper.addEventListener('touchend', function () {
-         setTimeout(function () { paused = false; }, 2000);
-      });
-
+      wrapper.addEventListener('touchend', function () { setTimeout(function () { paused = false; }, 2000); });
       inner.addEventListener('click', function (e) {
          if (didDrag) { didDrag = false; e.preventDefault(); e.stopPropagation(); }
       });
-
       requestAnimationFrame(step);
    }
 
-   initScroller(
-      '.module-product-gallery .scroll-wrapper',
-      '.module-product-gallery .scroll-inner',
-      0.4
-   );
-})();
-</script>
-
-<script>
-(function () {
-   var mockup = document.querySelector('.iphone-mockup');
-   if (!mockup) return;
-
-   var minH    = 25;
-   var maxH    = 45;
-   var current = minH;
-   var step    = 0.25;
-   var lastY   = window.scrollY;
-   var ticking = false;
-
-   function update() {
-      var y     = window.scrollY;
-      var delta = y - lastY;
-      lastY     = y;
-
-      if (delta > 0) {
-         current = Math.min(current + step, maxH);
-      } else if (delta < 0) {
-         current = Math.max(current - step, minH);
-      }
-
-      mockup.style.minHeight = current + 'rem';
-      ticking = false;
-   }
-
-   window.addEventListener('scroll', function () {
-      if (!ticking) {
-         ticking = true;
-         requestAnimationFrame(update);
-      }
-   }, { passive: true });
+   initScroller('.module-country-icons .scroll-wrapper', '.module-country-icons .scroll-inner', 0.5);
+   initScroller('.module-product-gallery .scroll-wrapper', '.module-product-gallery .scroll-inner', 0.4);
 })();
 </script>
 <script>
@@ -500,125 +395,20 @@
    var wrapper = document.querySelector('.module-country-icons .scroll-wrapper');
    var inner   = document.querySelector('.module-country-icons .scroll-inner');
    if (!wrapper || !inner) return;
-
-   var origItems = Array.from(inner.children);
-   origItems.forEach(function (item) {
-      var clone = item.cloneNode(true);
-      clone.setAttribute('aria-hidden', 'true');
-      inner.appendChild(clone);
-   });
-
-   var pos    = 0;
-   var paused = false;
-   var speed  = 0.5;
-   var loopAt = 0;
-
-   function getLoopAt() {
-      if (!loopAt) loopAt = inner.scrollWidth / 2;
-      return loopAt;
-   }
-
-   function wrapPos(p) {
-      var l = getLoopAt();
-      return ((p % l) + l) % l;
-   }
-
-   function step() {
-      if (!paused) {
-         pos += speed;
-         if (pos >= getLoopAt()) pos = 0;
-         inner.style.transform = 'translateX(-' + pos + 'px)';
-      }
-      requestAnimationFrame(step);
-   }
-
-   wrapper.addEventListener('mouseenter', function () { if (!dragging) paused = true; });
-   wrapper.addEventListener('mouseleave', function () { if (!dragging) paused = false; });
-
-   var dragging     = false;
-   var dragStartX   = 0;
-   var dragStartPos = 0;
-   var didDrag      = false;
-
-   inner.addEventListener('mousedown', function (e) {
-      dragging           = true;
-      paused             = true;
-      dragStartX         = e.clientX;
-      dragStartPos       = pos;
-      didDrag            = false;
-      inner.style.cursor = 'grabbing';
-      e.preventDefault();
-   });
-
-   document.addEventListener('mousemove', function (e) {
-      if (!dragging) return;
-      var delta = dragStartX - e.clientX;
-      if (Math.abs(delta) > 3) didDrag = true;
-      pos = wrapPos(dragStartPos + delta);
-      inner.style.transform = 'translateX(-' + pos + 'px)';
-   });
-
-   document.addEventListener('mouseup', function () {
-      if (!dragging) return;
-      dragging           = false;
-      inner.style.cursor = '';
-      setTimeout(function () { paused = false; }, 1200);
-   });
-
-   var touchStartX   = 0;
-   var touchStartY   = 0;
-   var touchStartPos = 0;
-   var touchHoriz    = null;
-
-   wrapper.addEventListener('touchstart', function (e) {
-      touchStartX   = e.touches[0].clientX;
-      touchStartY   = e.touches[0].clientY;
-      touchStartPos = pos;
-      touchHoriz    = null;
-      paused        = true;
-   }, { passive: true });
-
-   wrapper.addEventListener('touchmove', function (e) {
-      var dx = e.touches[0].clientX - touchStartX;
-      var dy = e.touches[0].clientY - touchStartY;
-      if (touchHoriz === null) touchHoriz = Math.abs(dx) > Math.abs(dy);
-      if (!touchHoriz) return;
-      e.preventDefault();
-      pos = wrapPos(touchStartPos - dx);
-      inner.style.transform = 'translateX(-' + pos + 'px)';
-   }, { passive: false });
-
-   wrapper.addEventListener('touchend', function () {
-      setTimeout(function () { paused = false; }, 2000);
-   });
-
+   var origItems = Array.from(inner.querySelectorAll(':scope > .column'));
    inner.addEventListener('click', function (e) {
-      if (didDrag) { didDrag = false; e.preventDefault(); e.stopPropagation(); return; }
       var link = e.target.closest('a[data-country]');
       if (!link || typeof gtag !== 'function') return;
-      gtag('event', 'esim_country_icon_click', {
-         country_name:    link.getAttribute('data-country'),
-         destination_url: link.href,
-         module:          'country_icons'
-      });
+      gtag('event', 'esim_country_icon_click', { country_name: link.getAttribute('data-country'), destination_url: link.href, module: 'country_icons' });
    });
-
    if (typeof IntersectionObserver !== 'undefined') {
       var viewed = false;
       new IntersectionObserver(function (entries, obs) {
          if (!viewed && entries[0].isIntersecting) {
-            viewed = true;
-            obs.disconnect();
-            if (typeof gtag === 'function') {
-               gtag('event', 'esim_country_scroller_view', {
-                  module:        'country_icons',
-                  country_count: origItems.length
-               });
-            }
+            viewed = true; obs.disconnect();
+            if (typeof gtag === 'function') gtag('event', 'esim_country_scroller_view', { module: 'country_icons', country_count: origItems.length });
          }
       }, { threshold: 0.5 }).observe(wrapper);
    }
-
-   requestAnimationFrame(step);
 })();
 </script>

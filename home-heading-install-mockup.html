@@ -1,3 +1,75 @@
+<?php
+$category_slug = $category_slug ?? '';
+// Get json country meta — direct file read (no cURL, no Cloudflare loopback)
+$obj = json_decode( file_get_contents( ABSPATH . 'api_data/region-data.json' ), true );
+
+// Get category name | slug
+global $wp_query;
+$cat = $wp_query->get_queried_object();
+
+if (!function_exists('get_category_data')){
+	function get_category_data($category,$meta) {
+		$val= '';
+		if($meta=='name'){
+			$cat_name = $category->name;
+			if(empty(trim($cat_name)) || $cat_name =='product'){
+				$val = 'Europe';
+			}else{
+				$val = $cat_name;
+			}
+		}elseif($meta=='slug'){
+			$category_slug = $category->slug;
+			if(empty($category_slug)){
+				$category_slug = 'esim-europe';
+			}
+			$string_remove_1 = 'esim-';
+			$string_remove_2 = '-unlimited-data';
+			$current_category_slug_trimmed_1 = str_replace($string_remove_1, '', $category_slug) ;
+			$val = str_replace($string_remove_2, '', $current_category_slug_trimmed_1) ;
+		}else{
+			$val = 'nada';
+		}
+		return $val;
+	}
+}
+//Get networks and other country meta if required
+if (!function_exists('get_country_values')){
+	function get_country_values($obj,$category_slug,$meta){
+		$val='';
+		if (is_array($obj) || is_object($obj)){
+			foreach ($obj as $items) { 
+				foreach($items as $key => $value) {
+					if(gettype($value) === 'array') {
+						$items[$key] = implode(",", $value);
+					} 
+					if($key == 'Region slug' && $value == $category_slug){
+						if($meta=='countries'){
+							$val = $items['Countries'];	
+						}elseif($meta=='cost_mb'){
+							$val = $items['$USD/MB'];	
+						}else{
+							$val=''	;
+						}
+					}
+				}
+			}
+		}	
+		return $val;
+	}
+}	
+$category_name = get_category_data($cat,'name');
+$category_slug = get_category_data($cat,'slug');
+$region_countries = get_country_values($obj,'europe','countries');
+$region_cost_mb = get_country_values($obj,$category_slug,'cost_mb');//Use later
+$region_countries_format = substr_replace($region_countries, ' and', strrpos($region_countries, ','), 1);
+if (!function_exists('stringCount')){
+	function stringCount($string){
+		$arrayCount = ($string)?count(explode(",",$string)):0;
+		return $arrayCount;
+	}
+}
+$stringCount = stringCount($region_countries);
+?>
 <style>
 .module-country-icons .scroll-wrapper {
    overflow: hidden;
@@ -112,8 +184,9 @@
    transform: scale(1.25);
 }
 </style>
+
 <div class="site-container">
-	
+
 	<div class="lg:px-8 pt-6 md:py-12">
 		<center class="mb-4">
                <div class="flex justify-center text-center text-base/7 font-semibold text-[#ed704a]"><div class="text-lg font-semibold text-[#ed704a]">Data | Calls &amp; SMS | Number</div></div>
@@ -158,7 +231,7 @@
       <div class="scroll-inner">
 
          <div class="column basis-[70px] shrink-0 text-center" style="flex-shrink:0;">
-            <a class="" title="eSIM Ãland Islands Calls" data-country="Ãland Islands" href="/product-category/esim-aland-islands/"><img width="60" height="60" class="w-[60px] mx-auto" src="/wp-content/uploads/2025/08/round-flag-aland-islands-150x150.png" alt="eSIM Ãland Islands Calls"></a><a class="inline-block text-sm/4 mt-2 text-center" style="color:#ffffff !important" title="eSIM Ãland Islands Calls" data-country="Ãland Islands" href="/product-category/esim-aland-islands/"><span>Ãland Islands&nbsp;›</span></a>
+            <a class="" title="eSIM Åland Islands Calls" data-country="Åland Islands" href="/product-category/esim-aland-islands/"><img width="60" height="60" class="w-[60px] mx-auto" src="/wp-content/uploads/2025/08/round-flag-aland-islands-150x150.png" alt="eSIM Åland Islands Calls"></a><a class="inline-block text-sm/4 mt-2 text-center" style="color:#ffffff !important" title="eSIM Åland Islands Calls" data-country="Åland Islands" href="/product-category/esim-aland-islands/"><span>Åland Islands&nbsp;›</span></a>
          </div>
 
          <div class="column basis-[70px] shrink-0 text-center" style="flex-shrink:0;">
@@ -334,7 +407,7 @@
 					<div class="px-8 pt-8 sm:px-10 sm:pt-10">
 						<p class="text-center text-sky-300 font-mono text-[0.8125rem]/6 font-small tracking-widest text-pretty uppercase !mb-0"> No apps, signups or id checks</p>
 <div class="text-white text-base/8 mx-auto lg:max-w-3xl text-center !mb-[48px] !mt-[40px]">
-		
+
 Do you need <b>fast data</b> for your apps and navigation. Check our <a href="/networks-europe/" class="font-bold !text-white" style="text-decoration: underline dotted;">trusted network partnerships</a> and <a href="javascript:void(0)" class="font-bold open-modal-dialog !text-white items-center" data-modal="modal_window_countries" role="button" aria-haspopup="dialog" aria-controls="modal_window_countries" aria-label="View list of countries for calls and SMS" style="text-decoration: underline dotted;">39+ country coverage <svg style="display:inline-block !important" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false" fill="white"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a>.
 <div style="line-height:10px; font-size:10px;">
 &nbsp;
@@ -551,3 +624,15 @@ Do you need <b>fast data</b> for your apps and navigation. Check our <a href="/n
    }
 })();
 </script>
+<!--LEAVE THIS HERE Countries Modal Dialog-->
+<dialog class="modal" id="modal_window_countries">
+   <div class="button-container"><button data-modal-close="modal_window_countries" class="button new-close-modal">Close</button></div>
+   <img src="/wp-content/uploads/2025/12/favicon_black.png" class="image-hero" alt="Europe Number success team" title="Europe Number success team">
+   <h2 class="pb-2 !normal-case"><b>Call or SMS</b></h2>
+   <p class="mt-2"><?php echo esc_html($region_countries) ?></p>
+   <p class="mt-2">Also <b>receive calls and SMS worldwide</b> when in these regions.</p>
+   <div class="author">
+      <img src="/wp-content/uploads/2025/08/help-assistant.png" width="96" height="96" alt="Europe Number success team" title="Europe Number success team" class="avatar"><span class="author-name">Your eSIM activates in all these regions</span>
+   </div>
+</dialog>
+<!--//Countries Modal Dialog-->

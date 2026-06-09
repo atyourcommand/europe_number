@@ -20,15 +20,21 @@
 .module-product-gallery {
    position: relative;
    padding: 10px 0 0;
+   width: 100%;
+   min-width: 0;
+   box-sizing: border-box;
 }
 .module-product-gallery .slider-track {
    overflow: hidden;
+   width: 100%;
+   min-width: 0;
 }
 .module-product-gallery .scroll-inner {
    display: flex;
    flex-wrap: nowrap;
    gap: 12px;
    transition: transform 0.35s ease;
+   will-change: transform;
 }
 .module-product-gallery .product-card {
    flex-shrink: 0;

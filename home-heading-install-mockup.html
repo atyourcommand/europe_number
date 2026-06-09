@@ -203,11 +203,11 @@
 
 
 			      <div class="relative max-md:row-start-2 md:col-start-1">
-        
+
         <div class="relative flex h-full flex-col overflow-hidden">
           <div class="px-8 pt-8 pb-3 sm:px-10 sm:pt-10 sm:pb-0">
 
-<p class="mt-2 max-w-lg max-lg:text-center text-sm/6 text-white">Scan your QR code to start the activation process. Check your Mobile/Cell => Sim screen on your phone to see your new number appear alongside your primary SIM.  </p>
+<p class="text-center text-sky-300 font-mono text-[0.8125rem]/6 font-small tracking-widest text-pretty uppercase !mb-0">Our easiest eSIM installation</p>
           </div>
           <div class="iphone-mockup @container relative min-h-[25rem] w-full grow max-lg:mx-auto max-lg:max-w-sm">
             <div class="absolute inset-x-10 top-10 bottom-0 overflow-hidden rounded-t-[12cqw] border-x-[3cqw] border-t-[3cqw] border-gray-700 bg-gray-900 shadow-2xl">
@@ -223,7 +223,7 @@
             <p class="mt-2 max-w-lg max-lg:text-center">Trip cancelled or things did not work out? If your eSim was not activated, we will gladly refund the listed price for up to 3 months from purchase. That is the Traveller eSIM promise.</p>
           </div>
           <div class="flex flex-1 items-center justify-center px-8 max-lg:pt-10 max-lg:pb-12 sm:px-10 lg:pb-2">
-            <img decoding="async" loading="lazy" width="130" height="190" class="max-lg:max-w-xs" src="https://europenumber.com/wp-content/uploads/2025/12/esim-data-30.png" alt="eSIM 30GB Data &amp; Number product badge">
+            <img decoding="async" loading="lazy" width="130" height="190" class="max-lg:max-w-xs" src="https://europenumber.com/wp-content/uploads/2025/12/esim-data-30.png" alt="eSIM 30GB Data &amp; Number product">
           </div>
         </div>
       </div>
@@ -262,6 +262,41 @@
 	</div>
 	</div>
 	</div>
+<script>
+(function () {
+   var mockup = document.querySelector('.iphone-mockup');
+   if (!mockup) return;
+
+   var minH    = 25;
+   var maxH    = 45;
+   var current = minH;
+   var step    = 0.25;
+   var lastY   = window.scrollY;
+   var ticking = false;
+
+   function update() {
+      var y     = window.scrollY;
+      var delta = y - lastY;
+      lastY     = y;
+
+      if (delta > 0) {
+         current = Math.min(current + step, maxH);
+      } else if (delta < 0) {
+         current = Math.max(current - step, minH);
+      }
+
+      mockup.style.minHeight = current + 'rem';
+      ticking = false;
+   }
+
+   window.addEventListener('scroll', function () {
+      if (!ticking) {
+         ticking = true;
+         requestAnimationFrame(update);
+      }
+   }, { passive: true });
+})();
+</script>
 <script>
 (function () {
    var wrapper = document.querySelector('.module-country-icons .scroll-wrapper');
@@ -387,41 +422,5 @@
    }
 
    requestAnimationFrame(step);
-})();
-</script>
-
-<script>
-(function () {
-   var mockup = document.querySelector('.iphone-mockup');
-   if (!mockup) return;
-
-   var minH    = 25;
-   var maxH    = 45;
-   var current = minH;
-   var step    = 0.25;
-   var lastY   = window.scrollY;
-   var ticking = false;
-
-   function update() {
-      var y     = window.scrollY;
-      var delta = y - lastY;
-      lastY     = y;
-
-      if (delta > 0) {
-         current = Math.min(current + step, maxH);
-      } else if (delta < 0) {
-         current = Math.max(current - step, minH);
-      }
-
-      mockup.style.minHeight = current + 'rem';
-      ticking = false;
-   }
-
-   window.addEventListener('scroll', function () {
-      if (!ticking) {
-         ticking = true;
-         requestAnimationFrame(update);
-      }
-   }, { passive: true });
 })();
 </script>

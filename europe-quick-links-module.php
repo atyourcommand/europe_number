@@ -105,8 +105,9 @@ function en_quick_links_module( $category_slug = null ) {
 	}
 	$category_name = $cat_is_term ? ( get_category_data( $cat, 'name' ) ?: ucfirst( $category_slug ) ) : ucfirst( $category_slug );
 
-	$json_path = ABSPATH . 'api_data/region-data.json';
-	$obj       = file_exists( $json_path ) ? json_decode( file_get_contents( $json_path ), true ) : [];
+	$show_image = false; // set true to re-enable the static image slot
+
+	$obj = en_get_region_data();
 
 	$region_countries        = get_country_values( $obj, $category_slug, 'countries' );
 	$region_cost_mb          = get_country_values( $obj, $category_slug, 'cost_mb' );
@@ -157,17 +158,19 @@ function en_quick_links_module( $category_slug = null ) {
 	?>
 	<style>
 	:root {
-		--en-ql-bg:     #4a9bed;
-		--en-ql-hover:  #2f7fd4;
+		--en-ql-bg:     #2f7fd4;
+		--en-ql-hover:  #4a9bed;
 		--en-ql-radius: 8px;
 		--en-ql-gap:    12px;
 	}
 	.en-ql-wrap {
-		display: flex;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 		flex-wrap: nowrap;
 		gap: var(--en-ql-gap);
 		width: 100%;
 		box-sizing: border-box;
+
 	}
 	.en-ql-btn {
 		flex: 1 1 0;
@@ -269,32 +272,33 @@ function en_quick_links_module( $category_slug = null ) {
 
 	<div class="site-container">
 	<div class="lg:px-8 md:py-12">
-	<div class="banner mx-auto lg:max-w-4xl overflow-hidden">
+	<div style="background-color:#4A9BED !important" class="banner mx-auto lg:max-w-4xl overflow-hidden">
 
-		<!-- TOP: Category quick links -->
-		<div class="bg-white flex items-center justify-center gap-6 px-6 py-3 border-b border-[#e2e8f0]">
-			<a href="https://europenumber.com/product-category/esim-france/"
-			   class="flex font-bold uppercase !text-[#4a9bed]"
-			   style="text-decoration: underline dotted;">France &rarr;</a>
-			<a href="https://europenumber.com/product-category/esim-europe/"
-			   class="flex font-bold uppercase !text-[#4a9bed]"
-			   style="text-decoration: underline dotted;">Europe &rarr;</a>
-			<a href="https://europenumber.com/product-category/esim-united-kingdom/"
-			   class="flex font-bold uppercase !text-[#4a9bed]"
-			   style="text-decoration: underline dotted;">The UK &rarr;</a>
-		</div>
+		<div class="bg-white border-b border-[#e2e8f0]">
+			
 
-		<!-- Heading — styled like a USP row with dynamic flag icon -->
-		<div class="flex items-center justify-center gap-1.5 px-5 pt-[30px] pb-2">
-			<img src="/wp-content/uploads/2025/08/round-flag-<?php echo esc_attr( $category_slug ); ?>-100x100.png"
-				 alt="<?php echo esc_attr( $category_name ); ?> flag"
-				 class="w-4 h-4 rounded-full flex-shrink-0"
-				 style="object-fit: cover;">
-			<span class="font-bold"><?php echo esc_html( $category_name ); ?> quick links</span>
+
+			<!-- Heading — styled like a USP row with dynamic flag icon -->
+			<div class="flex items-center justify-center gap-1.5 px-5 pt-[30px] pb-2">
+				<img src="/wp-content/uploads/2025/08/round-flag-<?php echo esc_attr( $category_slug ); ?>-100x100.png"
+					 alt="<?php echo esc_attr( $category_name ); ?> flag"
+					 class="w-6 h-6 rounded-full flex-shrink-0"
+					 style="object-fit: cover;">
+				<strong class="text-base/5 md:text-lg/7"><?php echo esc_html( $category_name ); ?> Quick Links</strong>
+			</div>
+
+			<div class="mx-auto">
+				<div class="max-lg:px-8" style="margin-bottom:5px;">
+					<div class="" style="flex: 1; align-items:center;">
+						<?php echo do_shortcode('[fibosearch]'); ?>
+					</div>	
+				</div>	
+			</div>
+		
 		</div>
 
 		<!-- Quick-link buttons -->
-		<div class="en-ql-wrap px-5 pb-5">
+		<div class="en-ql-wrap px-5 pb-5 pt-5">
 			<?php
 			while ( $query->have_posts() ) :
 				$query->the_post();
@@ -331,92 +335,44 @@ function en_quick_links_module( $category_slug = null ) {
 			endwhile;
 			wp_reset_postdata();
 			?>
+			<?php if ( $show_image ) : ?>
 			<!-- Static image quick link -->
 			<a href="https://europenumber.com/product-category/esim-europe/" class="en-ql-btn en-ql-btn--image">
 				<img src="https://europenumber.com/wp-content/uploads/2026/05/quick-links-europe-7.webp"
 					 alt="Europe eSIM plans"
 					 class="en-ql-img">
 			</a>
+			<?php endif; ?>
 		</div>
 
-		<!-- Selling points / trust bar — BOTTOM -->
-		<div class="flex flex-wrap gap-2 px-6 py-3.5 bg-[#EDF2F7] border-t border-[#e2e8f0]">
-		<!-- List -->
-		<ul class="items-center !mx-auto uppercase grid max-md:grid-cols-2 grid-cols-4 gap-[12px] w-fit max-w-4xl" style="padding:0; justify-content:center;font-size:90%; font-family: var(--global-heading-font-family)">
+		<!-- Selling points / trust bar -->
+		<div class="flex flex-wrap gap-2 px-2 md:px-6 py-3.5 bg-[#EDF2F7] border-t border-[#e2e8f0]">
+		<ul class="items-center !mx-auto uppercase grid max-md:grid-cols-2 grid-cols-4 gap-[12px] w-fit max-w-4xl" style="padding:0; margin-bottom:0; justify-content:center;font-size:90%; font-family: var(--global-heading-font-family)">
 		  <li class="flex gap-x-2">
-			<span class="mt-0.5 size-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-800/30 dark:text-blue-500">
-			  <svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-				  <path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path>
-			  </svg>
+			<span class="mt-0.5 size-5 flex justify-center items-center text-blue-600 dark:text-blue-500">
+			  <svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path></svg>
 			</span>
-			<div class="grow">
-			  <span class="dark:text-white">
-				  <span class="font-bold"><a href="javascript:void(0)"
-   class="flex open-modal-dialog !text-[#4a9bed] items-center"
-   data-modal="modal_window_countries"
-   role="button"
-   aria-haspopup="dialog"
-   aria-controls="modal_window_countries"
-   aria-label="View list of countries for calls and SMS" style="text-decoration: underline dotted;">Network <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></span>
-			  </span>
-			</div>
+			<div class="grow"><span class="dark:text-white"><span class="font-bold"><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_countries" role="button" aria-haspopup="dialog" aria-controls="modal_window_countries" aria-label="View list of countries for calls and SMS" style="text-decoration: underline dotted;">Network <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></span></span></div>
 		  </li>
 		  <li class="flex gap-x-2">
-			<span class="mt-0.5 size-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-800/30 dark:text-blue-500">
-			  <svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-				  <path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path>
-			  </svg>
+			<span class="mt-0.5 size-5 flex justify-center items-center text-blue-600 dark:text-blue-500">
+			  <svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path></svg>
 			</span>
-			<div class="grow">
-			  <span class="dark:text-white">
-				  <span class="font-bold"><a href="javascript:void(0)"
-   class="flex open-modal-dialog !text-[#4a9bed] items-center"
-   data-modal="modal_window_poi_a"
-   role="button"
-   aria-haspopup="dialog"
-   aria-controls="modal_window_poi_a"
-   aria-label="View more about your France Phone Number" style="text-decoration: underline dotted;">+33 number <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></span>
-			  </span>
-			</div>
+			<div class="grow"><span class="dark:text-white"><span class="font-bold"><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_poi_a" role="button" aria-haspopup="dialog" aria-controls="modal_window_poi_a" aria-label="View more about your France Phone Number" style="text-decoration: underline dotted;">+33&nbsp;Number <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></span></span></div>
 		  </li>
 		  <li class="flex gap-x-2">
-			<span class="mt-0.5 size-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-800/30 dark:text-blue-500">
-			  <svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-				  <path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path>
-			  </svg>
+			<span class="mt-0.5 size-5 flex justify-center items-center text-blue-600 dark:text-blue-500">
+			  <svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path></svg>
 			</span>
-			<div class="grow">
-			  <span class="dark:text-white">
-				  <span class="font-bold"><a href="javascript:void(0)"
-   class="flex open-modal-dialog !text-[#4a9bed] items-center"
-   data-modal="modal_window_poi_b"
-   role="button"
-   aria-haspopup="dialog"
-   aria-controls="modal_window_poi_b"
-   aria-label="View more Travel ready" style="text-decoration: underline dotted;">Travel ready<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></span>
-			  </span>
-			</div>
+			<div class="grow"><span class="dark:text-white"><span class="font-bold"><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_poi_b" role="button" aria-haspopup="dialog" aria-controls="modal_window_poi_b" aria-label="View more Travel ready" style="text-decoration: underline dotted;">Travellers <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></span></span></div>
 		  </li>
 		  <li class="flex gap-x-2">
-			<span class="mt-0.5 size-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-800/30 dark:text-blue-500">
-			  <svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-				  <path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path>
-			  </svg>
+			<span class="mt-0.5 size-5 flex justify-center items-center text-blue-600 dark:text-blue-500">
+			  <svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path></svg>
 			</span>
-			<div class="grow">
-			  <span class="dark:text-white">
-				<span class="font-bold"><a href="javascript:void(0)"
-   class="flex open-modal-dialog !text-[#4a9bed] items-center"
-   data-modal="modal_window_poi_c"
-   role="button"
-   aria-haspopup="dialog"
-   aria-controls="modal_window_poi_c"
-   aria-label="View more about Data Users eSIM Comparison" style="text-decoration: underline dotted;">Comparison<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></span>
-			  </span>
-			</div>
+			<div class="grow"><span class="dark:text-white"><span class="font-bold"><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_poi_c" role="button" aria-haspopup="dialog" aria-controls="modal_window_poi_c" aria-label="View more about Data Users eSIM Comparison" style="text-decoration: underline dotted;">Compare <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></span></span></div>
 		  </li>
 		</ul>
-		<!-- End List -->
 		</div>
 
 	</div>
@@ -424,19 +380,18 @@ function en_quick_links_module( $category_slug = null ) {
 	</div><!-- /.lg:px-8 -->
 	</div><!-- /.site-container -->
 
-	<!--LEAVE THIS HERE Countries Modal Dialog-->
-	<dialog class="modal" id="modal_window_countries">
-		<div class="button-container"><button data-modal-close="modal_window_countries" class="button new-close-modal">Close</button></div>
-		<img src="/wp-content/uploads/2025/12/favicon_black.png" class="image-hero" alt="Europe Number success team" title="Europe Number success team">
-		<h2 class="pb-2"><b>Call or SMS</b></h2>
-		<p><?php echo esc_html( $region_countries ); ?></p>
-		<p class="mt-2"><b>Receive calls worldwide when in these regions.</b></p>
-		<div class="author">
-			<img src="/wp-content/uploads/2025/08/help-assistant.png" width="96" height="96" alt="Europe Number success team" title="Europe Number success team" class="avatar">
-			<span class="author-name">Your eSIM activates in all these regions</span>
-		</div>
-	</dialog>
-	<!--//Countries Modal Dialog-->
+<!--LEAVE THIS HERE Countries Modal Dialog-->
+<dialog class="modal" id="modal_window_countries">
+   <div class="button-container"><button data-modal-close="modal_window_countries" class="button new-close-modal">Close</button></div>
+   <img src="/wp-content/uploads/2025/12/favicon_black.png" class="image-hero" alt="Europe Number success team" title="Europe Number success team">
+   <h2 class="pb-2 !normal-case"><b>eSIM Network Coverage</b></h2>
+   <p class="mt-2"><?php echo esc_html($region_countries) ?></p>
+   <p class="mt-2">With a number, <b>receive calls and SMS worldwide</b> when in these regions.</p>
+   <div class="author">
+      <img src="/wp-content/uploads/2025/08/help-assistant.png" width="96" height="96" alt="Europe Number success team" title="Europe Number success team" class="avatar"><span class="author-name">Your eSIM only works in these regions</span>
+   </div>
+</dialog>
+<!--//Countries Modal Dialog-->
 
 	<?php
 	return ob_get_clean();

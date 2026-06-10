@@ -37,26 +37,26 @@ if (!function_exists('get_country_values')){
 	function get_country_values($obj,$category_slug,$meta){
 		$val='';
 		if (is_array($obj) || is_object($obj)){
-			foreach ($obj as $items) { 
+			foreach ($obj as $items) {
 				foreach($items as $key => $value) {
 					if(gettype($value) === 'array') {
 						$items[$key] = implode(",", $value);
-					} 
+					}
 					if($key == 'Region slug' && $value == $category_slug){
 						if($meta=='countries'){
-							$val = $items['Countries'];	
+							$val = $items['Countries'];
 						}elseif($meta=='cost_mb'){
-							$val = $items['$USD/MB'];	
+							$val = $items['$USD/MB'];
 						}else{
 							$val=''	;
 						}
 					}
 				}
 			}
-		}	
+		}
 		return $val;
 	}
-}	
+}
 $category_name = get_category_data($cat,'name');
 $category_slug = get_category_data($cat,'slug');
 $region_countries = get_country_values($obj,'europe','countries');
@@ -184,12 +184,33 @@ $stringCount = stringCount($region_countries);
    transform: scale(1.25);
 }
 </style>
-
+<style>
+/* Minimal scoped styles only for things Tailwind can't handle inline */
+.hc-btn { display:flex; align-items:center; gap:10px; padding:12px 14px; border-radius:9px; border:1px solid #e2e8f0; background:#fff; color:#111; text-decoration:none; font-size:13px; font-weight:500; transition:background .13s,border-color .13s; }
+.hc-btn:hover { background:#EDF2F7; border-color:#cbd5e0; }
+.hc-btn.hc-primary { background:#111; color:#fff; border-color:#111; }
+.hc-btn.hc-primary:hover { background:#333; border-color:#333; }
+.hc-btn svg { flex-shrink:0; width:18px; height:18px; }
+.hc-btn-inner { display:flex; flex-direction:column; gap:2px; }
+.hc-btn-desc { font-size:11px; color:#aaa; font-weight:400; line-height:1; }
+.hc-btn.hc-primary .hc-btn-desc { color:rgba(255,255,255,.5); }
+.hc-badge { display:inline-flex; align-items:center; gap:4px; background:#E1F5EE; color:#0F6E56; font-size:10px; padding:2px 8px; border-radius:99px; margin-left:6px; font-weight:600; vertical-align:middle; }
+.hc-dot { width:5px; height:5px; background:#1D9E75; border-radius:50%; display:inline-block; }
+.hc-card, .hc-card:hover { text-decoration:none; }
+.hc-card { border:1px solid #e8e8e8; border-radius:10px; overflow:hidden; text-decoration:none; display:flex; flex-direction:column; background:#fff; transition:border-color .15s,box-shadow .15s; color:#111; }
+.hc-card:hover { border-color:#4A9BED; box-shadow:0 4px 12px rgba(74,155,237,.15); }
+.hc-card-head { padding:.75rem .85rem .5rem; text-align:center; border-bottom:1px solid #f0f0f0; }
+.hc-card-head h3 { font-size:18px; font-weight:700; text-transform:uppercase; letter-spacing:-0.45px; line-height:27px; color:#1A202C; margin:0 0 2px; }
+.hc-card-cta { display:block; text-align:center; margin:0; }
+.hc-card-cta sup { font-size:11.2px; font-weight:700; letter-spacing:-0.28px; color:#1A202C; vertical-align:super; }
+.hc-card-img { background:#4A9BED; display:flex; align-items:center; justify-content:center; padding:1rem 1rem; flex:1; min-height:50px; }
+.hc-card-img svg { width:54px; height:54px; color:#fff; opacity:.95; }
+</style>
 <div class="site-container">
 
 	<div class="lg:px-8 pt-6 md:py-12">
-		<center class="mb-4">
-               <div class="flex justify-center text-center text-base/7 font-semibold text-[#ed704a]"><div class="text-lg font-semibold text-[#ed704a]">Data | Calls &amp; SMS | Number</div></div>
+		<center class="mb-[30px]">
+               <div class="flex justify-center text-center text-base/7 font-semibold text-[#ed704a]"><div class="text-lg font-semibold text-[#ed704a]">Data Plans | Calls &amp; SMS | Temp Number</div></div>
                <div class="flex flex-wrap justify-center align-center !text-2xl lg:!text-4xl !font-semibold !tracking-tight !text-balance !capitalize">
                   <span class="whitespace-nowrap"><h1 class="text-center !text-2xl lg:!text-4xl !font-semibold !tracking-tight !text-balance !normal-case !mt-0">Europe Number eSIM</h1></span>&nbsp;
                   <span class="flex whitespace-nowrap">
@@ -197,7 +218,7 @@ $stringCount = stringCount($region_countries);
                      &nbsp;<img src="/wp-content/uploads/2026/05/icon-5g.png" width="19" height="" alt="5g" class="self-center">
                   </span>
                </div>
-               <div class="flex justify-center gap-x-2 mt-[5px]">
+               <!--<div class="flex justify-center gap-x-2 mt-[5px]">
                   <span class="mt-0.5 size-5 flex justify-center items-center text-blue-600 dark:text-blue-500">
                      <svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path>
@@ -208,13 +229,13 @@ $stringCount = stringCount($region_countries);
                         <span class="font-bold"><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_countries" role="button" aria-haspopup="dialog" aria-controls="modal_window_countries" aria-label="View list of countries for calls and SMS" style="text-decoration: underline dotted;">Network <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></span>
                      </span>
                   </div>
-               </div>
+               </div>-->
             </center>
 	<div style="background-color:#4A9BED !important" class="banner mx-auto lg:max-w-4xl overflow-hidden">
 <div class="bg-white flex items-center justify-center gap-2 sm:gap-6 px-6 py-3 border-b border-[#e2e8f0]">
-			<div class="mx-auto">
+			<div class="flex-1 mx-auto">
 				<div class="max-lg:px-8" style="margin-bottom:5px; margin-top:10px">
-					<div class="" style="flex: 1; align-items:center;">
+					<div class="" style="align-items:center;">
 						<?php echo do_shortcode('[fibosearch]'); ?>
 					</div>
 				</div>
@@ -408,7 +429,7 @@ $stringCount = stringCount($region_countries);
 							<p class="text-center text-sky-300 font-mono text-[0.8125rem]/6 font-small tracking-widest text-pretty uppercase !mb-0"> No apps, signups or id checks</p>
 <div class="flex items-start justify-center pt-16 pb-[20px]">
   <div class="w-full max-w-lg space-y-2">
-    <div class="flex items-center gap-3 px-5 py-2.5 rounded-full bg-[#daf1fc] border border-[#29B5E8]"><svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path></svg><span class="text-sm font-bold text-[#0a7bab]">39+ countries</span></div>
+	  <div class="flex items-center gap-3 px-5 py-2.5 rounded-full bg-[#daf1fc] border border-[#29B5E8]"><svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path></svg><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_countries" role="button" aria-haspopup="dialog" aria-controls="modal_window_countries" aria-label="View list of countries for calls and SMS" style="text-decoration: underline dotted;"><span class="text-sm font-bold text-[#0a7bab]">39+ countries</span> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="#0a7bab" d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></div>
     <div class="flex items-center gap-3 px-5 py-2.5 rounded-full bg-[#daf1fc] border border-[#29B5E8]"><svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path></svg><span class="text-sm font-bold text-[#0a7bab]">Receive calls worldwide</span></div>
     <div class="flex items-center gap-3 px-5 py-2.5 rounded-full bg-[#daf1fc] border border-[#29B5E8]"><svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path></svg><span class="text-sm font-bold text-[#0a7bab]">Data only plans</span></div>
     <div class="flex items-center gap-3 px-5 py-2.5 rounded-full bg-[#daf1fc] border border-[#29B5E8]"><svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path></svg><span class="text-sm font-bold text-[#0a7bab]">Friendly chat help</span></div>
@@ -442,35 +463,56 @@ $stringCount = stringCount($region_countries);
 
 			</div>
 
-			<!-- Selling points / trust bar -->
-			<div class="flex flex-wrap gap-2 px-2 md:px-6 py-3.5 bg-[#EDF2F7] border-t border-[#e2e8f0]">
-			<ul class="items-center !mx-auto uppercase grid max-md:grid-cols-2 grid-cols-4 gap-[12px] w-fit max-w-4xl" style="padding:0; margin-bottom:0; justify-content:center;font-size:90%; font-family: var(--global-heading-font-family)">
-			  <li class="flex gap-x-2">
-				<span class="mt-0.5 size-5 flex justify-center items-center text-blue-600 dark:text-blue-500">
-				  <svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path></svg>
-				</span>
-				<div class="grow"><span class="dark:text-white"><span class="font-bold"><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_countries" role="button" aria-haspopup="dialog" aria-controls="modal_window_countries" aria-label="View list of countries for calls and SMS" style="text-decoration: underline dotted;">Network <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></span></span></div>
-			  </li>
-			  <li class="flex gap-x-2">
-				<span class="mt-0.5 size-5 flex justify-center items-center text-blue-600 dark:text-blue-500">
-				  <svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path></svg>
-				</span>
-				<div class="grow"><span class="dark:text-white"><span class="font-bold"><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_poi_a" role="button" aria-haspopup="dialog" aria-controls="modal_window_poi_a" aria-label="View more about your France Phone Number" style="text-decoration: underline dotted;">+33&nbsp;Number <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></span></span></div>
-			  </li>
-			  <li class="flex gap-x-2">
-				<span class="mt-0.5 size-5 flex justify-center items-center text-blue-600 dark:text-blue-500">
-				  <svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path></svg>
-				</span>
-				<div class="grow"><span class="dark:text-white"><span class="font-bold"><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_poi_b" role="button" aria-haspopup="dialog" aria-controls="modal_window_poi_b" aria-label="View more Travel ready" style="text-decoration: underline dotted;">Travellers <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></span></span></div>
-			  </li>
-			  <li class="flex gap-x-2">
-				<span class="mt-0.5 size-5 flex justify-center items-center text-blue-600 dark:text-blue-500">
-				  <svg width="26px" height="26px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 16L4.35009 13.3929C2.24773 11.8912 1 9.46667 1 6.88306V3L8 0L15 3V6.88306C15 9.46667 13.7523 11.8912 11.6499 13.3929L8 16ZM12.2071 5.70711L10.7929 4.29289L7 8.08579L5.20711 6.29289L3.79289 7.70711L7 10.9142L12.2071 5.70711Z" fill="#00BCFF"></path></svg>
-				</span>
-				<div class="grow"><span class="dark:text-white"><span class="font-bold"><a href="javascript:void(0)" class="flex open-modal-dialog !text-[#4a9bed] items-center" data-modal="modal_window_poi_c" role="button" aria-haspopup="dialog" aria-controls="modal_window_poi_c" aria-label="View more about Data Users eSIM Comparison" style="text-decoration: underline dotted;">Compare <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg></a></span></span></div>
-			  </li>
-			</ul>
-			</div>
+    <!-- Buttons footer — inside banner -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2.5 px-6 py-4 bg-[#EDF2F7] border-t border-[#e2e8f0]">
+      <!-- 3CX live chat — drills into shadow DOM, falls back to /support/ -->
+      <a class="hc-btn hc-primary" href="#" onclick="(function(){
+  console.log('Live chat clicked');
+  var w = document.querySelector('call-us-selector');
+  console.log('call-us-selector:', w);
+  if (!w) { console.log('FAIL: no call-us-selector'); window.open('https://1063.3cx.cloud/live-chat/europenumber','3cx-chat','width=400,height=600'); return; }
+  if (!w.shadowRoot) { console.log('FAIL: no shadowRoot on selector'); window.open('https://1063.3cx.cloud/live-chat/europenumber','3cx-chat','width=400,height=600'); return; }
+  var c = w.shadowRoot.querySelector('call-us');
+  console.log('call-us element:', c);
+  if (!c) { console.log('FAIL: no call-us inside shadow'); window.open('https://1063.3cx.cloud/live-chat/europenumber','3cx-chat','width=400,height=600'); return; }
+  var inst = c._instance;
+  console.log('Vue instance:', inst);
+  if (!inst) { console.log('FAIL: no _instance'); window.open('https://1063.3cx.cloud/live-chat/europenumber','3cx-chat','width=400,height=600'); return; }
+  var eb = inst.setupState && inst.setupState.eventBus;
+  console.log('eventBus:', eb);
+  if (!eb) { console.log('FAIL: no eventBus'); window.open('https://1063.3cx.cloud/live-chat/europenumber','3cx-chat','width=400,height=600'); return; }
+  console.log('Calling onToggleCollapsed.next()');
+  eb.onToggleCollapsed.next();
+  console.log('Done');
+})();return false;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <div class="hc-btn-inner">
+          <span style="font-size:13px;font-weight:500;line-height:1;">Live chat <span class="hc-badge"><span class="hc-dot"></span>online</span></span>
+          <span class="hc-btn-desc">Chat with us now</span>
+        </div>
+      </a>
+      <a class="hc-btn" href="https://europenumber.com/support/">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <div class="hc-btn-inner">
+          <span style="font-size:13px;font-weight:500;line-height:1;">Support form</span>
+          <span class="hc-btn-desc">We reply within a few hours</span>
+        </div>
+      </a>
+      <a class="hc-btn" href="https://wa.me/610404562005?text=Hey!%20I%20need%20some%20extra%20information%20about%20your%20products.">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        <div class="hc-btn-inner">
+          <span style="font-size:13px;font-weight:500;line-height:1;">WhatsApp chat</span>
+          <span class="hc-btn-desc">+613 0404 562 005</span>
+        </div>
+      </a>
+      <a class="hc-btn" href="https://travelleresim.com/installation-service/">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <div class="hc-btn-inner">
+          <span style="font-size:13px;font-weight:500;line-height:1;">Book install session</span>
+          <span class="hc-btn-desc">Free guided setup call</span>
+        </div>
+      </a>
+    </div>
 
 		</div>
 		</div>
@@ -629,11 +671,11 @@ $stringCount = stringCount($region_countries);
 <dialog class="modal" id="modal_window_countries">
    <div class="button-container"><button data-modal-close="modal_window_countries" class="button new-close-modal">Close</button></div>
    <img src="/wp-content/uploads/2025/12/favicon_black.png" class="image-hero" alt="Europe Number success team" title="Europe Number success team">
-   <h2 class="pb-2 !normal-case"><b>Call or SMS</b></h2>
+   <h2 class="pb-2 !normal-case"><b>eSIM Network Coverage</b></h2>
    <p class="mt-2"><?php echo esc_html($region_countries) ?></p>
-   <p class="mt-2">Also <b>receive calls and SMS worldwide</b> when in these regions.</p>
+   <p class="mt-2">With a number, <b>receive calls and SMS worldwide</b> when in these regions.</p>
    <div class="author">
-      <img src="/wp-content/uploads/2025/08/help-assistant.png" width="96" height="96" alt="Europe Number success team" title="Europe Number success team" class="avatar"><span class="author-name">Your eSIM activates in all these regions</span>
+      <img src="/wp-content/uploads/2025/08/help-assistant.png" width="96" height="96" alt="Europe Number success team" title="Europe Number success team" class="avatar"><span class="author-name">Your eSIM only works in these regions</span>
    </div>
 </dialog>
 <!--//Countries Modal Dialog-->

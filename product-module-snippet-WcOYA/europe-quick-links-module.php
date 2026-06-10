@@ -105,6 +105,8 @@ function en_quick_links_module( $category_slug = null ) {
 	}
 	$category_name = $cat_is_term ? ( get_category_data( $cat, 'name' ) ?: ucfirst( $category_slug ) ) : ucfirst( $category_slug );
 
+	$show_image = false; // set true to re-enable the static image slot
+
 	$obj = en_get_region_data();
 
 	$region_countries        = get_country_values( $obj, $category_slug, 'countries' );
@@ -333,12 +335,14 @@ function en_quick_links_module( $category_slug = null ) {
 			endwhile;
 			wp_reset_postdata();
 			?>
+			<?php if ( $show_image ) : ?>
 			<!-- Static image quick link -->
 			<a href="https://europenumber.com/product-category/esim-europe/" class="en-ql-btn en-ql-btn--image">
 				<img src="https://europenumber.com/wp-content/uploads/2026/05/quick-links-europe-7.webp"
 					 alt="Europe eSIM plans"
 					 class="en-ql-img">
 			</a>
+			<?php endif; ?>
 		</div>
 
 		<!-- Selling points / trust bar -->

@@ -154,8 +154,6 @@ function en_quick_links_module( $category_slug = null ) {
 			 . ']. Check WooCommerce product category slugs.</p>';
 	}
 
-	$btn_base = 'en-ql-btn flex flex-col items-center justify-center gap-1 no-underline py-[18px] px-3 max-sm:py-3 max-sm:px-1.5 rounded-lg text-center transition duration-200 min-w-0 hover:-translate-y-0.5 focus:-translate-y-0.5';
-
 	ob_start();
 	?>
 	<style>
@@ -218,8 +216,8 @@ function en_quick_links_module( $category_slug = null ) {
 
 				$btn_label   = en_ql_traffic_label( $traffic_policy );
 				$btn_class   = $traffic_policy === 'data'
-					? $btn_base . ' bg-[#FFA103] text-black hover:bg-[#e08f00] hover:text-black focus:bg-[#e08f00] focus:text-black'
-					: $btn_base . ' bg-[#2f7fd4] text-white hover:bg-[#4a9bed] hover:text-white focus:bg-[#4a9bed] focus:text-white';
+					? 'en-ql-btn flex flex-col items-center justify-center gap-1 no-underline py-[18px] px-3 max-sm:py-3 max-sm:px-1.5 rounded-lg text-center transition duration-200 min-w-0 hover:-translate-y-0.5 focus:-translate-y-0.5 bg-[#FFA103] text-black hover:bg-[#e08f00] hover:text-black focus:bg-[#e08f00] focus:text-black'
+					: 'en-ql-btn flex flex-col items-center justify-center gap-1 no-underline py-[18px] px-3 max-sm:py-3 max-sm:px-1.5 rounded-lg text-center transition duration-200 min-w-0 hover:-translate-y-0.5 focus:-translate-y-0.5 bg-[#2f7fd4] text-white hover:bg-[#4a9bed] hover:text-white focus:bg-[#4a9bed] focus:text-white';
 				$label_class = $traffic_policy === 'data'
 					? 'block text-[9px] font-semibold uppercase tracking-widest text-black/60 leading-tight mt-0.5'
 					: 'block text-[9px] font-semibold uppercase tracking-widest text-white/75 leading-tight mt-0.5';

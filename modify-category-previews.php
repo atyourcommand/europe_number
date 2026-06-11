@@ -87,6 +87,7 @@ add_action( 'woocommerce_before_shop_loop_item_title', function() {
     $data_available     = en_calculated_data( $display_size, $display_units );
     $modal_img          = 'esim-' . ( $traffic_policy === 'data' ? 'data-' : '' ) . ( rtrim( $display_size ) === '' ? 'number' : $display_size ) . '-205x300.png';
     $use_in             = esc_html( $term_name ) . ( strtolower( $term_name ) !== 'europe' ? ', Europe' : '' ) . ' & UK';
+    $banner_bg          = ( $traffic_policy === 'data' ) ? '#e07820' : ( ( $traffic_policy === 'calls' ) ? '#29a8df' : '#2d5fa8' );
 
     ob_start(); ?>
     <h2 class="mt-2 text-sm lg:text-base font-bold tracking-tight text-[#1a202c] text-center uppercase" style="font-size:80%;margin-bottom:10px;text-align:center;">
@@ -105,7 +106,7 @@ add_action( 'woocommerce_before_shop_loop_item_title', function() {
             <div class="product-price"><?= $price ?></div>
         </div>
 
-        <div class="data-option-message"><?= esc_html( $deliverables_label ) ?></div>
+        <div class="data-option-message" style="background-color:<?= esc_attr( $banner_bg ) ?>"><?= esc_html( $deliverables_label ) ?></div>
 
         <div class="details-row-brief">
             <div class="details-expiry"><?= esc_html( $expiry_days ) ?> days</div>

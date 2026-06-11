@@ -117,7 +117,11 @@ add_action( 'woocommerce_before_shop_loop_item_title', function() {
                    aria-haspopup="dialog"
                    aria-controls="modal_window_<?= esc_attr( $product_id ) ?>"
                    data-modal="modal_window_<?= esc_attr( $product_id ) ?>"
-                   title="Click for more details">
+                   data-product-name="<?= esc_attr( $product_name ) ?>"
+                   data-product-id="<?= esc_attr( $product_id ) ?>"
+                   data-product-type="<?= esc_attr( $deliverables_label ) ?>"
+                   title="Click for more details"
+                   onclick="gtag('event','esim_product_view_more_click',{product_name:this.dataset.productName,product_id:this.dataset.productId,product_type:this.dataset.productType,module:'product_cards'})">
                     View more&nbsp;<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg>
                 </a>
             </div>

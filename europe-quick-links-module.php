@@ -157,9 +157,129 @@ function en_quick_links_module( $category_slug = null ) {
 	ob_start();
 	?>
 	<style>
+	/* =====================================================
+	   Quick Links Module — en-ql-*
+	   Layout handled here; structural wrapper uses Tailwind.
+	   ===================================================== */
+
+	/* -- Colour tokens -- */
+	:root {
+		--en-ql-bg:     #2f7fd4; /* default button background */
+		--en-ql-hover:  #4a9bed; /* default button hover/focus */
+		--en-ql-radius: 8px;
+		--en-ql-gap:    12px;
+	}
+
+	/* -- Button grid wrapper -- */
+	.en-ql-wrap {
+		display: grid;
+		grid-template-columns: repeat( 5, 1fr );
+		gap: var(--en-ql-gap);
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	/* -- Base button -- */
+	.en-ql-btn {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 4px;
+		background-color: var(--en-ql-bg);
+		color: #ffffff;
+		text-decoration: none;
+		padding: 18px 12px;
+		border-radius: var(--en-ql-radius);
+		text-align: center;
+		transition: background-color 0.2s ease, transform 0.15s ease;
+		min-width: 0;
+	}
+	.en-ql-btn:hover,
+	.en-ql-btn:focus {
+		background-color: var(--en-ql-hover);
+		color: #ffffff;
+		transform: translateY(-2px);
+		text-decoration: none;
+	}
+
+	/* -- Data-only variant (orange) -- */
+	.en-ql-btn--data {
+		background-color: #FFA103;
+		color: #000000;
+	}
+	.en-ql-btn--data:hover,
+	.en-ql-btn--data:focus {
+		background-color: #e08f00;
+		color: #000000;
+	}
+	.en-ql-btn--data .en-ql-label {
+		color: rgba(0, 0, 0, 0.6);
+	}
+
+	/* -- Static image slot -- */
+	.en-ql-btn--image {
+		padding: 0;
+		overflow: hidden;
+	}
+	.en-ql-btn--image:hover,
+	.en-ql-btn--image:focus {
+		background-color: transparent;
+	}
+	.en-ql-img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		border-radius: var(--en-ql-radius);
+	}
+
+	/* -- Button text elements -- */
+	.en-ql-title {
+		display: block;
+		font-size: 1.2rem;
+		font-weight: 700;
+		line-height: 1.2;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 100%;
+	}
+	.en-ql-price {
+		display: block;
+		font-size: 0.875rem;
+		font-weight: 700;
+		opacity: 0.9;
+		line-height: 1.2;
+	}
+	.en-ql-label {
+		display: block;
+		font-size: 9px;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: rgba(255, 255, 255, 0.75);
+		line-height: 1.2;
+		margin-top: 2px;
+	}
+
+	/* -- WooCommerce price colour override -- */
 	.en-ql-btn .woocommerce-Price-amount,
 	.en-ql-btn .woocommerce-Price-currencySymbol {
 		color: #ffffff !important;
+	}
+
+	/* -- Mobile: 3-column grid -- */
+	@media ( max-width: 640px ) {
+		.en-ql-wrap {
+			grid-template-columns: repeat( 3, 1fr );
+		}
+		.en-ql-btn {
+			padding: 12px 6px;
+		}
+		.en-ql-btn--image {
+			padding: 0;
+		}
 	}
 	</style>
 
@@ -189,7 +309,7 @@ function en_quick_links_module( $category_slug = null ) {
 		</div>
 
 		<!-- Quick-link buttons -->
-		<div class="grid grid-cols-5 max-sm:grid-cols-3 gap-3 w-full box-border px-5 pb-5 pt-5">
+		<div class="en-ql-wrap px-5 pb-5 pt-5">
 			<?php
 			while ( $query->have_posts() ) :
 				$query->the_post();
@@ -214,18 +334,13 @@ function en_quick_links_module( $category_slug = null ) {
 					$display_title = get_the_title();
 				}
 
-				$btn_label   = en_ql_traffic_label( $traffic_policy );
-				$btn_class   = $traffic_policy === 'data'
-					? 'en-ql-btn flex flex-col items-center justify-center gap-1 no-underline py-[18px] px-3 max-sm:py-3 max-sm:px-1.5 rounded-lg text-center transition duration-200 min-w-0 hover:-translate-y-0.5 focus:-translate-y-0.5 bg-[#FFA103] text-black hover:bg-[#e08f00] hover:text-black focus:bg-[#e08f00] focus:text-black'
-					: 'en-ql-btn flex flex-col items-center justify-center gap-1 no-underline py-[18px] px-3 max-sm:py-3 max-sm:px-1.5 rounded-lg text-center transition duration-200 min-w-0 hover:-translate-y-0.5 focus:-translate-y-0.5 bg-[#2f7fd4] text-white hover:bg-[#4a9bed] hover:text-white focus:bg-[#4a9bed] focus:text-white';
-				$label_class = $traffic_policy === 'data'
-					? 'block text-[9px] font-semibold uppercase tracking-widest text-black/60 leading-tight mt-0.5'
-					: 'block text-[9px] font-semibold uppercase tracking-widest text-white/75 leading-tight mt-0.5';
+				$btn_label = en_ql_traffic_label( $traffic_policy );
+				$btn_class = $traffic_policy === 'data' ? 'en-ql-btn en-ql-btn--data' : 'en-ql-btn';
 				?>
 				<a href="<?php echo esc_url( $link ); ?>" class="<?php echo $btn_class; ?>">
-					<span class="block text-[1.2rem] font-bold leading-tight truncate max-w-full"><?php echo esc_html( $display_title ); ?></span>
-					<span class="block text-sm font-bold opacity-90 leading-tight"><?php echo $price; ?></span>
-					<span class="<?php echo $label_class; ?>"><?php echo esc_html( $btn_label ); ?></span>
+					<span class="en-ql-title"><?php echo esc_html( $display_title ); ?></span>
+					<span class="en-ql-price"><?php echo $price; ?></span>
+					<span class="en-ql-label"><?php echo esc_html( $btn_label ); ?></span>
 				</a>
 			<?php
 			endwhile;
@@ -233,10 +348,10 @@ function en_quick_links_module( $category_slug = null ) {
 			?>
 			<?php if ( $show_image ) : ?>
 			<!-- Static image quick link -->
-			<a href="https://europenumber.com/product-category/esim-europe/" class="flex items-center justify-center p-0 overflow-hidden rounded-lg hover:bg-transparent focus:bg-transparent">
+			<a href="https://europenumber.com/product-category/esim-europe/" class="en-ql-btn en-ql-btn--image">
 				<img src="https://europenumber.com/wp-content/uploads/2026/05/quick-links-europe-7.webp"
 					 alt="Europe eSIM plans"
-					 class="w-full h-full object-cover block rounded-lg">
+					 class="en-ql-img">
 			</a>
 			<?php endif; ?>
 		</div>

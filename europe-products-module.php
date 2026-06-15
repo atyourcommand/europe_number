@@ -267,7 +267,7 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 	#ep-cat-wrap,
 	#ep-data-wrap {
 		border-radius: 9999px;
-		animation: ep-select-pulse 2s ease-in-out infinite;
+		animation: ep-select-pulse 6s ease-in-out infinite;
 	}
 
 	/* ── Brand icon speech bubble ─────────────────────────────────────────── */

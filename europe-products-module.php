@@ -263,6 +263,12 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 		box-shadow: 0 0 0 2px rgba(255,255,255,0.5) !important;
 	}
 
+	/* ── Product image fade-in ───────────────────────────────────────────── */
+	@keyframes ep-img-fade {
+		from { opacity: 0; }
+		to   { opacity: 0.92; }
+	}
+
 	/* ── Dropdown select pulse ────────────────────────────────────────────── */
 	@keyframes ep-select-pulse {
 		0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.5); }
@@ -707,7 +713,7 @@ function ep_js() {
 				? '<div class="flex justify-center mb-1">'
 				+ '<a href="' + esc(p.permalink) + '">'
 				+ '<img src="' + esc(p.image) + '" alt="' + escAttr(p.title) + '"'
-				+ ' style="max-width:90px;height:auto;display:block;border-radius:6px;opacity:0.92;">'
+				+ ' style="max-width:90px;height:auto;display:block;border-radius:6px;animation:ep-img-fade 0.5s ease forwards;">'
 				+ '</a>'
 				+ '</div>'
 				: '')

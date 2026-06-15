@@ -261,18 +261,13 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 
 	/* ── Dropdown select pulse ────────────────────────────────────────────── */
 	@keyframes ep-select-pulse {
-		0%, 100% {
-			background-color: rgba(0,0,0,0.5) !important;
-			border-color: rgba(255,255,255,0.3) !important;
-		}
-		50% {
-			background-color: rgba(255,255,255,0.18) !important;
-			border-color: rgba(255,255,255,1) !important;
-		}
+		0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.5); }
+		50%       { box-shadow: 0 0 0 6px rgba(255,255,255,0); }
 	}
-	#ep-module select#ep-category,
-	#ep-module select#ep-data {
-		animation: ep-select-pulse 2s ease-in-out infinite !important;
+	#ep-cat-wrap,
+	#ep-data-wrap {
+		border-radius: 9999px;
+		animation: ep-select-pulse 2s ease-in-out infinite;
 	}
 
 	/* ── Brand icon speech bubble ─────────────────────────────────────────── */
@@ -336,13 +331,13 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 					<div class="flex gap-2">
 
 						<!-- Category -->
-						<div class="relative flex-1">
+						<div class="relative flex-1" id="ep-cat-wrap">
 							<select id="ep-category" aria-label="Category"></select>
 							<span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white/70 text-xs" aria-hidden="true">&#9660;</span>
 						</div>
 
 						<!-- Data / Duration -->
-						<div class="relative flex-1 min-w-0">
+						<div class="relative flex-1 min-w-0" id="ep-data-wrap">
 							<select id="ep-data" aria-label="Data" disabled></select>
 							<span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white/70 text-xs" aria-hidden="true">&#9660;</span>
 						</div>

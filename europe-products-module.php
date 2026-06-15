@@ -702,20 +702,20 @@ function ep_js() {
 			+   esc(state.category || p.categories[0] || '')
 			+ '</h2>'
 
-			// ── Product name ───────────────────────────────────────────────
-			+ '<p class="text-white/90 text-sm text-center">'
-			+ (p.permalink ? '<a href="' + esc(p.permalink) + '" class="underline underline-offset-2" style="color:#FFD700!important;font-weight:700!important;" onmouseover="this.style.color=\'#ffffff\'" onmouseout="this.style.color=\'#FFD700\'">' + esc(p.title) + ' &rarr;</a>' : esc(p.title))
-			+ '</p>'
-
 			// ── Product image ──────────────────────────────────────────────
 			+ (p.image && p.permalink
-				? '<div class="flex justify-center mt-1">'
+				? '<div class="flex justify-center mb-1">'
 				+ '<a href="' + esc(p.permalink) + '">'
 				+ '<img src="' + esc(p.image) + '" alt="' + escAttr(p.title) + '"'
 				+ ' style="max-width:90px;height:auto;display:block;border-radius:6px;opacity:0.92;">'
 				+ '</a>'
 				+ '</div>'
-				: '');
+				: '')
+
+			// ── Product name ───────────────────────────────────────────────
+			+ '<p class="text-white/90 text-sm text-center">'
+			+ (p.permalink ? '<a href="' + esc(p.permalink) + '" class="underline underline-offset-2" style="color:#FFD700!important;font-weight:700!important;" onmouseover="this.style.color=\'#ffffff\'" onmouseout="this.style.color=\'#FFD700\'">' + esc(p.title) + ' &rarr;</a>' : esc(p.title))
+			+ '</p>';
 
 		// ── Button placeholder (#ep-card-btn) ──────────────────────────────
 		btnEl.innerHTML = btnHtml;

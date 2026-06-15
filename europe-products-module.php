@@ -259,15 +259,6 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 		box-shadow: 0 0 0 2px rgba(255,255,255,0.5) !important;
 	}
 
-	/* ── Add to cart button pulse ─────────────────────────────────────────── */
-	@keyframes ep-btn-pulse {
-		0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.45); }
-		50%       { box-shadow: 0 0 0 7px rgba(255,255,255,0); }
-	}
-	#ep-card-btn a.ajax_add_to_cart {
-		animation: ep-btn-pulse 2s ease-in-out infinite !important;
-	}
-
 	/* ── Dropdown select pulse ────────────────────────────────────────────── */
 	@keyframes ep-select-pulse {
 		0%, 100% { border-color: rgba(255,255,255,0.3) !important; }

@@ -261,8 +261,14 @@ function ep_html( $default_category = 'Europe', $default_data = '30GB', $disable
 
 	/* ── Dropdown select pulse ────────────────────────────────────────────── */
 	@keyframes ep-select-pulse {
-		0%, 100% { border-color: rgba(255,255,255,0.3) !important; }
-		50%       { border-color: rgba(255,255,255,0.9) !important; }
+		0%, 100% {
+			background-color: rgba(0,0,0,0.5) !important;
+			border-color: rgba(255,255,255,0.3) !important;
+		}
+		50% {
+			background-color: rgba(255,255,255,0.18) !important;
+			border-color: rgba(255,255,255,1) !important;
+		}
 	}
 	#ep-module select#ep-category,
 	#ep-module select#ep-data {

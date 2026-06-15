@@ -714,7 +714,7 @@ function ep_js() {
 				+ '<a href="' + esc(p.permalink) + '" style="position:relative;display:inline-block;">'
 				+ '<img src="' + esc(p.image) + '" alt="' + escAttr(p.title) + '"'
 				+ ' style="max-width:90px;height:auto;display:block;border-radius:6px;animation:ep-img-fade 0.5s ease forwards;">'
-				+ '<span style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;background:#ffffff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#000000;line-height:1;pointer-events:none;box-shadow:0 1px 3px rgba(0,0,0,0.3);">+</span>'
+				+ '<span style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;background:rgba(255,255,255,0.75);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#000000;line-height:1;pointer-events:none;box-shadow:0 1px 3px rgba(0,0,0,0.3);">+</span>'
 				+ '</a>'
 				+ '</div>'
 				: '')

@@ -378,24 +378,6 @@
    </div>
 </div>
 <script>
-   (function () {
-      var mockup = document.querySelector('.iphone-mockup');
-      if (!mockup) return;
-      var minH = 25, maxH = window.innerWidth < 768 ? 36 : 45, current = minH, step = 0.25;
-      var lastY = window.scrollY, ticking = false;
-      function update() {
-         var y = window.scrollY, delta = y - lastY; lastY = y;
-         if (delta > 0) current = Math.min(current + step, maxH);
-         else if (delta < 0) current = Math.max(current - step, minH);
-         mockup.style.minHeight = current + 'rem';
-         ticking = false;
-      }
-      window.addEventListener('scroll', function () {
-         if (!ticking) { ticking = true; requestAnimationFrame(update); }
-      }, { passive: true });
-   })();
-</script>
-<script>
    /* Product gallery — manual slider with arrows, dots, touch swipe */
    (function () {
       var gallery = document.querySelector('.module-product-gallery');

@@ -710,7 +710,7 @@ function ep_js() {
 
 			// ── Product image ──────────────────────────────────────────────
 			+ (p.image && p.permalink
-				? '<div class="flex justify-center mb-1">'
+				? '<div class="flex justify-center mb-1" style="min-height:90px;">'
 				+ '<a href="' + esc(p.permalink) + '">'
 				+ '<img src="' + esc(p.image) + '" alt="' + escAttr(p.title) + '"'
 				+ ' style="max-width:90px;height:auto;display:block;border-radius:6px;animation:ep-img-fade 0.5s ease forwards;">'

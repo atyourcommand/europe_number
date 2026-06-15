@@ -141,11 +141,15 @@ function ep_build_payload() {
 		// Validity — meta:download_expiry_days (numeric days, e.g. 15, 30)
 		$expiry_days = ep_get_meta( $id, 'download_expiry_days', 'meta:download_expiry_days', '_download_expiry' );
 
+		$image_id  = $product->get_image_id();
+		$image_src = $image_id ? wp_get_attachment_image_src( $image_id, 'medium' ) : false;
+
 		$products[] = [
 			'id'             => $id,
 			'title'          => $product->get_name(),
 			'sku'            => $product->get_sku(),
 			'permalink'      => get_permalink( $id ),
+			'image'          => $image_src ? $image_src[0] : '',
 			'add_to_cart_url' => $product->add_to_cart_url(),
 			'price'          => (float) $product->get_price(),
 			'categories'     => $cats,
@@ -701,7 +705,17 @@ function ep_js() {
 			// ── Product name ───────────────────────────────────────────────
 			+ '<p class="text-white/90 text-sm text-center">'
 			+ (p.permalink ? '<a href="' + esc(p.permalink) + '" class="underline underline-offset-2" style="color:#FFD700!important;font-weight:700!important;" onmouseover="this.style.color=\'#ffffff\'" onmouseout="this.style.color=\'#FFD700\'">' + esc(p.title) + ' &rarr;</a>' : esc(p.title))
-			+ '</p>';
+			+ '</p>'
+
+			// ── Product image ──────────────────────────────────────────────
+			+ (p.image && p.permalink
+				? '<div class="flex justify-center mt-1">'
+				+ '<a href="' + esc(p.permalink) + '">'
+				+ '<img src="' + esc(p.image) + '" alt="' + escAttr(p.title) + '"'
+				+ ' style="max-width:90px;height:auto;display:block;border-radius:6px;opacity:0.92;">'
+				+ '</a>'
+				+ '</div>'
+				: '');
 
 		// ── Button placeholder (#ep-card-btn) ──────────────────────────────
 		btnEl.innerHTML = btnHtml;

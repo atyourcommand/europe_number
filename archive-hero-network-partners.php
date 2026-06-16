@@ -15,8 +15,11 @@
    $country_intros = en_get_country_intros();
 
    // Category identity — from helpers snippet.
-   $cat_slug      = en_get_cat_slug() ?: 'esim-europe';  // e.g. 'esim-europe'
-   $category_name = en_get_cat_name() ?: 'Europe';       // e.g. 'Europe'
+   // Fall back to Europe defaults when no term is queried or WC injects the 'product' catch-all category.
+   $_raw_slug     = en_get_cat_slug();
+   $_raw_name     = en_get_cat_name();
+   $cat_slug      = ($_raw_slug && $_raw_slug !== 'product') ? $_raw_slug : 'esim-europe';
+   $category_name = ($_raw_name && strtolower($_raw_name) !== 'product') ? $_raw_name : 'Europe';
    $category_slug = str_replace('esim-', '', $cat_slug); // e.g. 'europe' — used for JSON lookup & flag image
 
    function get_country_values($obj, $category_slug, $meta) {
